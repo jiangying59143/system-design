@@ -11,6 +11,7 @@ services:
       MYSQL_DATABASE: master-slave
       MYSQL_USER: master
       MYSQL_PASSWORD: master
+      TZ: Asia/Shanghai
     volumes:
       - ./master-data:/var/lib/mysql # 数据库文件
       - ./master-conf:/etc/mysql
@@ -25,6 +26,7 @@ services:
         ipv4_address: 172.1.0.3
     environment:
       MYSQL_ROOT_PASSWORD: slave
+      TZ: Asia/Shanghai
     volumes:
       - ./slave-data:/var/lib/mysql
       - ./slave-conf:/etc/mysql
