@@ -1,0 +1,26 @@
+version: '3'
+services:
+  master:
+    image: mariadb:10.8.3
+    container_name: mariadb-master
+    environment:
+      MYSQL_ROOT_PASSWORD: master
+      MYSQL_DATABASE: master-slave
+      MYSQL_USER: master
+      MYSQL_PASSWORD: master
+    volumes:
+      - ./master-data:/var/lib/mysql # 数据库文件
+      - ./master-conf:/etc/mysql
+    ports:
+      - "3306:3306"
+
+  slave:
+    image: mariadb:10.8.3
+    container_name: mariadb-slave
+    environment:
+      MYSQL_ROOT_PASSWORD: slave
+    volumes:
+      - ./slave-data:/var/lib/mysql
+      - ./slave-conf:/etc/mysql
+    ports:
+      - "3307:3306"
