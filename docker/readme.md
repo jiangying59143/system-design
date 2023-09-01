@@ -18,3 +18,19 @@ _"xxx uses an image, skipping" 这个信息通常出现在Docker Compose的输�
 _**如果想在docker-compose.xml修改的密码生效 需要删除挂在文件**_
 
 `docker-compose down`
+
+### network
+
+`docker network ls`
+
+网络模式	简介
+
+Host	容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。
+
+Bridge	此模式会为每一个容器分配、设置IP等，并将容器连接到一个docker0虚拟网桥，通过docker0网桥以及Iptables nat表配置与宿主机通信。
+
+None	该模式关闭了容器的网络功能。
+
+Container	创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围。
+
+自定义网络	略

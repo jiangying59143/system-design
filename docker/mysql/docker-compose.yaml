@@ -3,6 +3,9 @@ services:
   master:
     image: mariadb:10.8.3
     container_name: mariadb-master
+    networks:
+      fixed:
+        ipv4_address: 172.1.0.2
     environment:
       MYSQL_ROOT_PASSWORD: master
       MYSQL_DATABASE: master-slave
@@ -17,6 +20,9 @@ services:
   slave:
     image: mariadb:10.8.3
     container_name: mariadb-slave
+    networks:
+      fixed:
+        ipv4_address: 172.1.0.3
     environment:
       MYSQL_ROOT_PASSWORD: slave
     volumes:
@@ -24,3 +30,10 @@ services:
       - ./slave-conf:/etc/mysql
     ports:
       - "3307:3306"
+
+networks:
+  fixed:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.1.0.0/24
