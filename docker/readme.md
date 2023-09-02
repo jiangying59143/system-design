@@ -1,3 +1,17 @@
+###docker 命令
+
+根据 **Dockerfile** build 出一个一个定制化的 image
+
+`docker build -t mysql-5.7 .`
+
+列出所有images
+
+`docker images`
+
+移除image
+
+`docker image rm xxx`
+
 ###docker-compose命令
 重新启动已经定义在docker-compose.yml文件中的所有服务，并在后台运行它们
 

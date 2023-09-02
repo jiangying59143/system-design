@@ -1,26 +1,23 @@
 version: '3'
 services:
   master:
-    image: mariadb:10.8.3
-    container_name: mariadb-master
+    image: mysql-5.7
+    container_name: mysql-master
     networks:
       fixed:
         ipv4_address: 172.1.0.2
     environment:
       MYSQL_ROOT_PASSWORD: master
-      MYSQL_DATABASE: master-slave
-      MYSQL_USER: master
-      MYSQL_PASSWORD: master
       TZ: Asia/Shanghai
     volumes:
-      - ./master-data:/var/lib/mysql # 数据库文件
-      - ./master-conf:/etc/mysql
+      - D:/docker-volume/mysql/master/data:/var/lib/mysql # 数据库文件
+      - ./master-conf/:/etc/mysql/conf.d/source
     ports:
       - "3306:3306"
 
   slave:
-    image: mariadb:10.8.3
-    container_name: mariadb-slave
+    image: mysql-5.7
+    container_name: mysql-slave
     networks:
       fixed:
         ipv4_address: 172.1.0.3
@@ -28,8 +25,8 @@ services:
       MYSQL_ROOT_PASSWORD: slave
       TZ: Asia/Shanghai
     volumes:
-      - ./slave-data:/var/lib/mysql
-      - ./slave-conf:/etc/mysql
+      - D:/docker-volume/mysql/slave/data:/var/lib/mysql
+      - ./slave-conf/:/etc/mysql/conf.d/source
     ports:
       - "3307:3306"
 
