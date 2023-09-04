@@ -13,11 +13,13 @@ show master status;
 
 --MASTER_LOG_FILE get value from "show master status"
 --MASTER_LOG_POS get value from "show master status"
+stop slave;
+
 change master to
 master_host='172.1.0.2',
 master_user='slave1',
 master_password='slave1-pass',
-MASTER_LOG_FILE='mysql-bin.000001',
+MASTER_LOG_FILE='mysql-bin.000003',
 MASTER_LOG_POS=787;
 
 start slave;
