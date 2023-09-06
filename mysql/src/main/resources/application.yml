@@ -1,0 +1,73 @@
+# application.yml
+
+# two groups, each has one master and two slaves
+spring:
+  shardingsphere:
+    datasource:
+      names: ds-master1, ds-master1-slave1, ds-master2, ds-master2-slave1
+      ds-master1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/master_slave_db?useSSL=false&serverTimezone=UTC
+        username: root
+        password: master1
+        hikari:
+          maximum-pool-size: 10
+          minimum-idle: 5
+      ds-master1-slave1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3307/master_slave_db?useSSL=false&serverTimezone=UTC
+        username: root
+        password: master1-slave1
+        hikari:
+          maximum-pool-size: 10
+          minimum-idle: 5
+      ds-master1-slave2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3308/master_slave_db?useSSL=false&serverTimezone=UTC
+        username: root
+        password: master1-slave2
+        hikari:
+          maximum-pool-size: 10
+          minimum-idle: 5
+      ds-master2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:13306/master_slave_db?useSSL=false&serverTimezone=UTC
+        username: root
+        password: master2
+        hikari:
+          maximum-pool-size: 10
+          minimum-idle: 5
+      ds-master2-slave1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:13307/master_slave_db?useSSL=false&serverTimezone=UTC
+        username: root
+        password: master2-slave1
+        hikari:
+          maximum-pool-size: 10
+          minimum-idle: 5
+      ds-master2-slave2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:13308/master_slave_db?useSSL=false&serverTimezone=UTC
+        username: root
+        password: master2-slave2
+        hikari:
+          maximum-pool-size: 10
+          minimum-idle: 5
+
+  sharding:
+    tables:
+      t_user:
+        actualDataNodes: ds-master${0..1}.t_user
+        tableStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: mod-hash
+
+
+# 其他ShardingSphere配置
