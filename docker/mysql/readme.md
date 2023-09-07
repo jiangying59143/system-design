@@ -7,6 +7,8 @@
 
 `FLUSH PRIVILEGES;`
 
+`SHOW master status;`
+
 _具体见 setMasterSlave.sql_
 
 ### slave 执行命令
@@ -19,5 +21,14 @@ _具体见 setMasterSlave.sql_
 
 `START SLAVE;`
 
+`SHOW slave status;`
+
 _具体见 setMasterSlave.sql_
 
+### 连接其他服务器命令
+
+`mysql -h master1 -uroot -proot`
+
+`mysql -h master1 -uroot -proot -e "SHOW MASTER STATUS" > /var/lib/mysql/master_status.txt`
+
+`sh /etc/mysql/conf.d/source/set-slave.sh`

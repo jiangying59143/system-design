@@ -1,38 +1,57 @@
 version: '3'
 services:
-  master:
+  master1:
     image: mysql-5.7
-    container_name: mysql-master
-    networks:
-      fixed:
-        ipv4_address: 172.1.0.2
+    container_name: mysql-master1
     environment:
-      MYSQL_ROOT_PASSWORD: master
+      MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - D:/docker-volume/mysql/master/data:/var/lib/mysql # 数据库文件
-      - ./master-conf/:/etc/mysql/conf.d/source
+      - D:/docker-volume/mysql/master1/data:/var/lib/mysql # 数据库文件
+      - ./master1-conf/:/etc/mysql/conf.d/source
+    hostname: master1
+    networks:
+      mysql-network:
+        ipv4_address: 172.18.0.2
     ports:
       - "3306:3306"
 
-  slave:
+  master1-slave1:
     image: mysql-5.7
-    container_name: mysql-slave
-    networks:
-      fixed:
-        ipv4_address: 172.1.0.3
+    container_name: mysql-master1-slave1
     environment:
-      MYSQL_ROOT_PASSWORD: slave
+      MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - D:/docker-volume/mysql/slave/data:/var/lib/mysql
-      - ./slave-conf/:/etc/mysql/conf.d/source
+      - D:/docker-volume/mysql/master1-slave1/data:/var/lib/mysql
+      - ./master1-slave1-conf/:/etc/mysql/conf.d/source
+    hostname: master1-slave1
+    networks:
+      mysql-network:
+        ipv4_address: 172.18.0.3
     ports:
       - "3307:3306"
 
+  master1-slave2:
+    image: mysql-5.7
+    container_name: mysql-master1-slave2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    volumes:
+      - D:/docker-volume/mysql/master1-slave2/data:/var/lib/mysql
+      - ./master1-slave2-conf/:/etc/mysql/conf.d/source
+    hostname: master1-slave2
+    networks:
+      mysql-network:
+        ipv4_address: 172.18.0.4
+    ports:
+      - "3308:3306"
+
 networks:
-  fixed:
+  mysql-network:
+    driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 172.1.0.0/24
+        - subnet: 172.18.0.0/16
