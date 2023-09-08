@@ -1,10 +1,10 @@
 #!/bin/bash
 # 设置用户 slave1
-mysql -h master1 -uroot -proot -e "CREATE USER 'master1-slave1'@'172.18.0.3' IDENTIFIED BY 'master1-slave1'";
-mysql -h master1 -uroot -proot -e "grant replication slave, replication client on *.* to 'master1-slave1'@'172.18.0.3';";
+mysql -h master1 -uroot -proot -e "CREATE USER 'master1-slave1'@'master1-slave1' IDENTIFIED BY 'master1-slave1'";
+mysql -h master1 -uroot -proot -e "grant replication slave, replication client on *.* to 'master1-slave1'@'master1-slave1';";
 # 设置用户 slave2
-mysql -h master1 -uroot -proot -e "CREATE USER 'master1-slave2'@'172.18.0.4' IDENTIFIED BY 'master1-slave2';"
-mysql -h master1 -uroot -proot -e "grant replication slave, replication client on *.* to 'master1-slave2'@'172.18.0.4';"
+mysql -h master1 -uroot -proot -e "CREATE USER 'master1-slave2'@'master1-slave2' IDENTIFIED BY 'master1-slave2';"
+mysql -h master1 -uroot -proot -e "grant replication slave, replication client on *.* to 'master1-slave2'@'master1-slave2';"
 mysql -h master1 -uroot -proot -e "flush privileges;"
 # 定义master_status.txt路径
 master_status_path='/etc/mysql/conf.d/source/master_status.txt'
@@ -28,7 +28,7 @@ mysql -h master1-slave1 -uroot -proot -e "stop slave;"
 # 更改主服务器配置，使用脚本中获取的值
 mysql -h master1-slave1 -uroot -proot <<EOF
 change master to
-master_host='172.18.0.2',
+master_host='master1',
 master_user='master1-slave1',
 master_password='master1-slave1',
 MASTER_LOG_FILE='$binlog_file',
@@ -41,7 +41,7 @@ mysql -h master1-slave2 -uroot -proot -e "stop slave;"
 # 更改主服务器配置，使用脚本中获取的值
 mysql -h master1-slave2 -uroot -proot <<EOF
 change master to
-master_host='172.18.0.2',
+master_host='master1',
 master_user='master1-slave2',
 master_password='master1-slave2',
 MASTER_LOG_FILE='$binlog_file',

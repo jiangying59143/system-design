@@ -1,7 +1,8 @@
 package com.example.mysql.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -10,7 +11,7 @@ public class UserDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     String name;
 
@@ -23,4 +24,5 @@ public class UserDO {
         this.name = name;
         this.age = age;
     }
+
 }

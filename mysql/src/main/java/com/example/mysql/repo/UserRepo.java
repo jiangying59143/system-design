@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2021/03/04 16:17
  */
 @Repository
-public interface UserRepo extends JpaRepository<UserDO, Integer> {
+public interface UserRepo extends JpaRepository<UserDO, Long> {
 
     @Transactional
     @Modifying

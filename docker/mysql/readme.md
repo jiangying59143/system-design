@@ -9,8 +9,6 @@
 
 `SHOW master status;`
 
-_具体见 setMasterSlave.sql_
-
 ### slave 执行命令
 
 在从服务器上执行以下命令，将主服务器的数据复制到从服务器上
@@ -22,8 +20,6 @@ _具体见 setMasterSlave.sql_
 `START SLAVE;`
 
 `SHOW slave status;`
-
-_具体见 setMasterSlave.sql_
 
 ### 连接其他服务器命令
 

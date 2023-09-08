@@ -1,11 +1,8 @@
 package com.example.mysql.controller;
 
-import com.example.mysql.dto.UserDto;
 import com.example.mysql.model.UserDO;
 import com.example.mysql.repo.UserRepo;
-import com.example.mysql.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
