@@ -1,15 +1,18 @@
 version: '3'
 services:
   master1:
-    image: mysql-5.7
+    image: mysql:5.7
     container_name: mysql-master1
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_SERVER_ID: 1
       TZ: Asia/Shanghai
+    entrypoint: /root/start.sh
     volumes:
       - D:/docker-volume/mysql/master1/data:/var/lib/mysql
       - D:/docker-volume/mysql/master1/log:/var/log/mysql
       - ./master1-conf/:/etc/mysql/conf.d/source
+      - ./custom-entry/start.sh:/root/start.sh
     hostname: master1
     networks:
       mysql-network:
@@ -18,15 +21,18 @@ services:
       - "3306:3306"
 
   master1-slave1:
-    image: mysql-5.7
+    image: mysql:5.7
     container_name: mysql-master1-slave1
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_SERVER_ID: 2
       TZ: Asia/Shanghai
+    entrypoint: /root/start.sh
     volumes:
       - D:/docker-volume/mysql/master1-slave1/data:/var/lib/mysql
       - D:/docker-volume/mysql/master1-slave1/log:/var/log/mysql
       - ./master1-slave1-conf/:/etc/mysql/conf.d/source
+      - ./custom-entry/start.sh:/root/start.sh
     hostname: master1-slave1
     networks:
       mysql-network:
@@ -35,15 +41,18 @@ services:
       - "3307:3306"
 
   master1-slave2:
-    image: mysql-5.7
+    image: mysql:5.7
     container_name: mysql-master1-slave2
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_SERVER_ID: 3
       TZ: Asia/Shanghai
+    entrypoint: /root/start.sh
     volumes:
       - D:/docker-volume/mysql/master1-slave2/data:/var/lib/mysql
       - D:/docker-volume/mysql/master1-slave2/log:/var/log/mysql
       - ./master1-slave2-conf/:/etc/mysql/conf.d/source
+      - ./custom-entry/start.sh:/root/start.sh
     hostname: master1-slave2
     networks:
       mysql-network:

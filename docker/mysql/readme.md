@@ -27,4 +27,4 @@
 
 `mysql -h master1 -uroot -proot -e "SHOW MASTER STATUS" > /var/lib/mysql/master_status.txt`
 
-`sh /etc/mysql/conf.d/source/set-slave.sh`
+`./etc/mysql/conf.d/source/set-sysn-and-create-db-table.sh`
