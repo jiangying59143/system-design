@@ -7,7 +7,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - D:/docker-volume/mysql/master1/data:/var/lib/mysql # 数据库文件
+      - D:/docker-volume/mysql/master1/data:/var/lib/mysql
+      - D:/docker-volume/mysql/master1/log:/var/log/mysql
       - ./master1-conf/:/etc/mysql/conf.d/source
     hostname: master1
     networks:
@@ -24,6 +25,7 @@ services:
       TZ: Asia/Shanghai
     volumes:
       - D:/docker-volume/mysql/master1-slave1/data:/var/lib/mysql
+      - D:/docker-volume/mysql/master1-slave1/log:/var/log/mysql
       - ./master1-slave1-conf/:/etc/mysql/conf.d/source
     hostname: master1-slave1
     networks:
@@ -40,6 +42,7 @@ services:
       TZ: Asia/Shanghai
     volumes:
       - D:/docker-volume/mysql/master1-slave2/data:/var/lib/mysql
+      - D:/docker-volume/mysql/master1-slave2/log:/var/log/mysql
       - ./master1-slave2-conf/:/etc/mysql/conf.d/source
     hostname: master1-slave2
     networks:
