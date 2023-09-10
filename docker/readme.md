@@ -48,3 +48,15 @@ None	该模式关闭了容器的网络功能。
 Container	创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围。
 
 自定义网络	略
+
+### docker-compose 命令
+
+`docker-compose -f docker-compose-mysql.yaml up -d`
+
+`docker exec mysql-master1-slave2 /etc/mysql/conf.d/source/set-sysn-and-create-db-table.sh`
+
+`docker-compose -f docker-compose-canal.yaml up -d`
+
+`docker-compose -f docker-compose-mysql.yaml -f docker-compose-canal.yaml down --remove-orphans`
+
+`docker exec canal-server1 /canal-server/conf/create_user.sh`

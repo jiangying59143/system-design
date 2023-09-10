@@ -1,0 +1,98 @@
+version: '3'
+services:
+  master1:
+    image: mysql:5.7
+    container_name: mysql-master1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_SERVER_ID: 1
+      TZ: Asia/Shanghai
+    entrypoint: /root/start.sh
+    volumes:
+      - ./mysql/tmp/master1/data:/var/lib/mysql
+      - ./mysql/tmp/master1/log:/var/log/mysql
+      - ./mysql/master1-conf/:/etc/mysql/conf.d/source
+      - ./mysql/custom-entry/start.sh:/root/start.sh
+      - ./mysql/master1-init/:/docker-entrypoint-initdb.d/
+    hostname: master1
+    networks:
+      mysql-network:
+        ipv4_address: 172.18.0.2
+    ports:
+      - "3306:3306"
+
+  master1-slave1:
+    image: mysql:5.7
+    container_name: mysql-master1-slave1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_SERVER_ID: 2
+      TZ: Asia/Shanghai
+    entrypoint: /root/start.sh
+    volumes:
+      - ./mysql/tmp/master1-slave1/data:/var/lib/mysql
+      - ./mysql/tmp/master1-slave1/log:/var/log/mysql
+      - ./mysql/master1-slave1-conf/:/etc/mysql/conf.d/source
+      - ./mysql/custom-entry/start.sh:/root/start.sh
+    hostname: master1-slave1
+    networks:
+      mysql-network:
+        ipv4_address: 172.18.0.3
+    ports:
+      - "3307:3306"
+
+  master1-slave2:
+    image: mysql:5.7
+    container_name: mysql-master1-slave2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_SERVER_ID: 3
+      TZ: Asia/Shanghai
+    entrypoint: /root/start.sh
+    volumes:
+      - ./mysql/tmp/master1-slave2/data:/var/lib/mysql
+      - ./mysql/tmp/master1-slave2/log:/var/log/mysql
+      - ./mysql/master1-slave2-conf/:/etc/mysql/conf.d/source
+      - ./mysql/custom-entry/start.sh:/root/start.sh
+      - ./mysql/master1-slave2-init/:/docker-entrypoint-initdb.d/
+    hostname: master1-slave2
+    networks:
+      mysql-network:
+        ipv4_address: 172.18.0.4
+    ports:
+      - "3308:3306"
+
+  canal-server:
+    image: canal/canal-server:v1.1.5
+    container_name: canal-server
+    ports:
+      - 11111:11111
+    volumes:
+      #      - ./canal/conf:/home/admin/canal-server/conf
+      - ./mysql/tmp/canal/canal-server-logs/:/home/admin/canal-server/logs/
+    privileged: true
+    environment:
+      - canal.instance.mysql.slaveId=4   # slaveId 不与其他重复即可
+      - canal.auto.scan=false                # 自动扫描
+      - canal.destinations=test         #  client 需要指定此 dest
+      - canal.instance.master.address=172.18.0.2:3306   # mysql 地址
+      - canal.instance.dbUsername=canal               # mysql username
+      - canal.instance.dbPassword=canal       # mysql 密码
+      - canal.instance.connectionCharset=UTF-8
+      - canal.mq.topic=db01
+      - canal.instance.filter.regex=db0.t_user,db1.t_user
+    depends_on:
+      - master1
+    links:
+      - master1
+    networks:
+      mysql-network:
+        ipv4_address: 172.18.0.5
+
+networks:
+  mysql-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16

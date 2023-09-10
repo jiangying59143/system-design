@@ -1,1 +1,8 @@
-/.idea/
+/.idea
+/canal/canal.iml
+/*/*.iml
+/*/target
+/system-design.iml
+/docker/canal/canal-server-logs/
+/docker/mysql/tmp/
+/docker/canal/mysql/

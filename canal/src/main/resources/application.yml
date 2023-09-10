@@ -1,0 +1,8 @@
+# application.yml
+canal:
+  server:
+    hostname: localhost
+    port: 11111
+    destination: test
+    username: canal
+    password: canal
