@@ -6,3 +6,4 @@
 /docker/canal/canal-server-logs/
 /docker/mysql/tmp/
 /docker/canal/mysql/
+/docker/TmpData/

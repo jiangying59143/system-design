@@ -30,7 +30,7 @@ public class CanalClient implements ApplicationRunner {
                 canalProperties.getPassword()
         );
         connector.connect();
-        connector.subscribe("test.*");; // 订阅所有数据库和表
+        connector.subscribe("db0.*|db1.*");; // 订阅所有数据库和表
         while (true) {
             //TODO 获取数据
             Message message = connector.get(100);
@@ -43,6 +43,7 @@ public class CanalClient implements ApplicationRunner {
             } else {
                 //TODO 遍历entries，单条解析
                 for (CanalEntry.Entry entry : entries) {
+                    String dbName = entry.getHeader().getSchemaName();
                     //1.获取表名
                     String tableName = entry.getHeader().getTableName();
                     //2.获取类型
@@ -72,7 +73,9 @@ public class CanalClient implements ApplicationRunner {
                             }
 
                             //数据打印
-                            System.out.println("Table:" + tableName +
+                            System.out.println(
+                                    "DB:" + dbName +
+                                    ",Table:" + tableName +
                                     ",EventType:" + eventType +
                                     ",Before:" + beforeData +
                                     ",After:" + afterData);

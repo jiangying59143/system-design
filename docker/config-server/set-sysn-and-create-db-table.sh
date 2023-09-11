@@ -48,7 +48,7 @@ mysql -h master1-slave1 -uroot -proot -e "stop slave;"
 echo "# 更改主服务器配置，使用脚本中获取的值"
 mysql -h master1-slave1 -uroot -proot <<EOF
 change master to
-master_host='172.1.0.2',
+master_host='master1',
 master_user='master1-slave1',
 master_password='master1-slave1',
 MASTER_LOG_FILE='$binlog_file',
@@ -69,7 +69,8 @@ MASTER_LOG_POS=$binlog_position;
 EOF
 echo "# 重新启动从服务器的复制进程"
 mysql -h master1-slave2 -uroot -proot -e "start slave;"
-
+mysql -h master1-slave1 -uroot -proot -e "show slave status;"
+mysql -h master1-slave2 -uroot -proot -e "show slave status;"
 echo "# 创建数据库和表"
 mysql -h master1 -uroot -proot -e "drop database if exists db0;";
 mysql -h master1 -uroot -proot -e "drop database if exists db1;";
@@ -97,9 +98,6 @@ create table db1.t_user
         unique (name)
 );
 EOF
-
-#mysql -h master1-slave1 -uroot -proot -e "show slave status;"
-#mysql -h master1-slave2 -uroot -proot -e "show slave status;"
 echo "# 创建数据库和表 完成 O(∩_∩)O"
 
 echo -e "\e[41m\e[44m ---------------- set-sysn-and-create-db-table.sh end ----------- \e[0m"

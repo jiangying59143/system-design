@@ -15,8 +15,8 @@ services:
     volumes:
       - ./mysql/custom-entry/start.sh:/root/start.sh
       - ./mysql/master1-conf/:/etc/mysql/conf.d/source
-      - ./canal/mysql/data/:/var/lib/mysql/
-      - ./canal/mysql/log:/var/log/mysql
+      - ./TmpData/canal/mysql/data/:/var/lib/mysql/
+      - ./TmpData/canal/mysql/log:/var/log/mysql
       - ./canal/mysql-init/:/docker-entrypoint-initdb.d/
     entrypoint: /root/start.sh
 
@@ -28,7 +28,7 @@ services:
       - 11111:11111
     volumes:
 #      - ./canal/conf:/home/admin/canal-server/conf
-      - ./canal/canal-server-logs/:/home/admin/canal-server/logs/
+      - ./TmpData/canal/canal-server-logs/:/home/admin/canal-server/logs/
     privileged: true
     environment:
       - canal.instance.mysql.slaveId=12   # slaveId 不与其他重复即可

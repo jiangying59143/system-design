@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  rabbitmq-node1:
+    container_name: rabbitmq-node1
+    hostname: rabbitmq-node1
+    image: rabbitmq:3.9.5-management-alpine
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=cookie
+      - RABBITMQ_NODENAME=rabbit@rabbitmq-node1
+      - RABBITMQ_USE_LONGNAME=true
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./TmpData/rabbitmq/rabbitmq-node1-data:/var/lib/rabbitmq
+    networks:
+      rabbitmq-network:
+        aliases:
+          - rabbitmq-node1
+
+  rabbitmq-node2:
+    image: rabbitmq:3.9.5-management-alpine
+    container_name: rabbitmq-node2
+    hostname: rabbitmq-node2
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=cookie
+      - RABBITMQ_NODENAME=rabbit@rabbitmq-node2
+      - RABBITMQ_USE_LONGNAME=true
+      - RABBITMQ_CLUSTER_NODE_TYPE=disc
+      - RABBITMQ_CLUSTER_DISC_RAM_NODE_NAME=rabbit@rabbitmq-node1
+    volumes:
+      - ./TmpData/rabbitmq/rabbitmq-node2-data:/var/lib/rabbitmq
+    networks:
+      rabbitmq-network:
+        aliases:
+          - rabbitmq-node2
+
+  rabbitmq-node3:
+    image: rabbitmq:3.9.5-management-alpine
+    container_name: rabbitmq-node3
+    hostname: rabbitmq-node3
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=cookie
+      - RABBITMQ_NODENAME=rabbit@rabbitmq-node3
+      - RABBITMQ_USE_LONGNAME=true
+      - RABBITMQ_CLUSTER_NODE_TYPE=disc
+      - RABBITMQ_CLUSTER_DISC_RAM_NODE_NAME=rabbit@rabbitmq-node1
+    volumes:
+      - ./TmpData/rabbitmq/rabbitmq-node3-data:/var/lib/rabbitmq
+    networks:
+      rabbitmq-network:
+        aliases:
+          - rabbitmq-node3
+
+networks:
+  rabbitmq-network:
