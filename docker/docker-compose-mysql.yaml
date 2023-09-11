@@ -16,8 +16,7 @@ services:
       - ./mysql/master1-init/:/docker-entrypoint-initdb.d/
     hostname: master1
     networks:
-      mysql-network:
-        ipv4_address: 172.18.0.2
+      - mysql-network
     ports:
       - "3306:3306"
 
@@ -36,8 +35,7 @@ services:
       - ./mysql/custom-entry/start.sh:/root/start.sh
     hostname: master1-slave1
     networks:
-      mysql-network:
-        ipv4_address: 172.18.0.3
+      - mysql-network
     ports:
       - "3307:3306"
 
@@ -54,11 +52,9 @@ services:
       - ./mysql/tmp/master1-slave2/log:/var/log/mysql
       - ./mysql/master1-slave2-conf/:/etc/mysql/conf.d/source
       - ./mysql/custom-entry/start.sh:/root/start.sh
-      - ./mysql/master1-slave2-init/:/docker-entrypoint-initdb.d/
     hostname: master1-slave2
     networks:
-      mysql-network:
-        ipv4_address: 172.18.0.4
+      - mysql-network
     ports:
       - "3308:3306"
 
@@ -75,7 +71,7 @@ services:
       - canal.instance.mysql.slaveId=4   # slaveId 不与其他重复即可
       - canal.auto.scan=false                # 自动扫描
       - canal.destinations=test         #  client 需要指定此 dest
-      - canal.instance.master.address=172.18.0.2:3306   # mysql 地址
+      - canal.instance.master.address=172.1.0.2:3306   # mysql 地址
       - canal.instance.dbUsername=canal               # mysql username
       - canal.instance.dbPassword=canal       # mysql 密码
       - canal.instance.connectionCharset=UTF-8
@@ -86,8 +82,12 @@ services:
     links:
       - master1
     networks:
-      mysql-network:
-        ipv4_address: 172.18.0.5
+      - mysql-network
+
+  my-config-server:
+    image: config-server:v1.0
+    networks:
+      - mysql-network
 
 networks:
   mysql-network:
@@ -95,4 +95,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.18.0.0/16
+        - subnet: 172.1.0.0/16

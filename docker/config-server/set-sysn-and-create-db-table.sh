@@ -1,3 +1,31 @@
+#!/bin/bash
+echo -e "\e[41m\e[44m ---------------- set-sysn-and-create-db-table.sh start ----------- \e[0m"
+
+while true; do
+  if mysqladmin ping -h master1 -u root -proot &> /dev/null; then
+    echo "MySQL is running"
+    break  # 如果MySQL已启动，退出循环
+  else
+    echo "MySQL is not running. Waiting for 5 seconds..."
+    sleep 5  # 如果MySQL未启动，等待5秒钟
+  fi
+done
+
+echo "Running MySQL initialization script(测试过了 'master1-slave1'@'%' ,只能用IP, 不能用主机名)..."
+echo "# 设置用户 slave1"
+mysql -h master1 -uroot -proot -e "CREATE USER 'master1-slave1'@'%' IDENTIFIED BY 'master1-slave1'";
+mysql -h master1 -uroot -proot -e "grant replication slave, replication client on *.* to 'master1-slave1'@'%';";
+echo "# 设置用户 slave2"
+mysql -h master1 -uroot -proot -e "CREATE USER 'master1-slave2'@'%' IDENTIFIED BY 'master1-slave2';"
+mysql -h master1 -uroot -proot -e "grant replication slave, replication client on *.* to 'master1-slave2'@'%';"
+echo "# 设置用户 canal"
+mysql -h master1 -uroot -proot -e "CREATE USER 'canal'@'%' IDENTIFIED BY 'canal'";
+mysql -h master1 -uroot -proot -e "grant select, replication slave, replication client on *.* to 'canal'@'%';";
+mysql -h master1 -uroot -proot -e "flush privileges;"
+mysql -h master1 -uroot -proot -e "SHOW GRANTS FOR 'master1-slave1'@'%';";
+mysql -h master1 -uroot -proot -e "SHOW GRANTS FOR 'master1-slave2'@'%';";
+mysql -h master1 -uroot -proot -e "SHOW GRANTS FOR 'canal'@'%';";
+
 echo "# 定义master_status.txt路径"
 master_status_path='/root/master_status.txt'
 echo "$master_status_path"
@@ -20,7 +48,7 @@ mysql -h master1-slave1 -uroot -proot -e "stop slave;"
 echo "# 更改主服务器配置，使用脚本中获取的值"
 mysql -h master1-slave1 -uroot -proot <<EOF
 change master to
-master_host='172.18.0.2',
+master_host='172.1.0.2',
 master_user='master1-slave1',
 master_password='master1-slave1',
 MASTER_LOG_FILE='$binlog_file',
@@ -73,3 +101,5 @@ EOF
 #mysql -h master1-slave1 -uroot -proot -e "show slave status;"
 #mysql -h master1-slave2 -uroot -proot -e "show slave status;"
 echo "# 创建数据库和表 完成 O(∩_∩)O"
+
+echo -e "\e[41m\e[44m ---------------- set-sysn-and-create-db-table.sh end ----------- \e[0m"

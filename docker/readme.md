@@ -1,3 +1,81 @@
+### 安装WSL
+`wsl --install`
+
+`wsl -l -v`
+result:Ubuntu                 Running         2
+
+在wsl 中运行docker的container 比用 docker desktop 要少   
+
+在开始菜单搜索ubuntu就可以进入子系统
+
+
+Docker镜像本质是什么?
+
+进程调度子系统.
+进程通信子系统
+内存管理子系统
+设备管理子系统
+文件管理子系统
+![linux文件系统](linux文件系统.png)
+bootfs 都是一样的(such as ubuntu, centos...)
+rootfs 不同
+网络通信子系统作业控制子系统
+
+Docker中一个centos镜像为什么只有200MB，而一个centos操作系统的iso文件要几个个G?
+
+Docker中一个tomcat镜像为什么有500MB，而一个tomcat安装包只有70多MB?
+![docker系统说明](docker系统说明.png)
+
+### 镜像制作
+Docker镜像如何制作?
+
+1 容器转为镜像
+
+docker commit 器id 镜像名称: 版本号
+
+docker save -o 压缩文件名称 镜像名称:版本号
+
+docker load -i 乐缩文件名称
+
+2 dockerfile
+
+
+### 私有仓库搭建
+
+#### 1、拉取私有仓库镜像
+
+`docker pul1 registry
+`
+#### 2、启动私有仓库容器
+
+`docker run -id --name=registry -p 5000:5000 registry
+`
+#### 3、打开浏览器 输入地址http://私有仓库服务器ip:5000/v2/-catalog,看到“repositories":[]} 表示私有仓库 搭建成功
+
+#### 4、修改daemon.json
+
+`vim /etc/docker/daemon.json`
+
+#### 在上述文件中添加一个key，保存退出。此步用于让 docker 信任私有仓库地址，注意将私有仓库服务器ip修改为自己私有仓库服务器真实ip
+
+["insecure-registries":["私有仓库服务器io:5000"]]
+
+#### 5、重启docker 服务
+
+`systemctl restart docker
+`
+`docker start registry`
+
+### 将镜像上传至私有仓库
+
+#### 1、标记造像为私有仓库的镜像
+
+`docker tag centos:7 私有仓库服务器IP:5000/centos:7
+`
+#### 2、上传标记的镜像
+
+`docker push 私有仓库服务器IP:5000/centos:7
+`
 ###docker 命令
 
 根据 **Dockerfile** build 出一个一个定制化的 image
