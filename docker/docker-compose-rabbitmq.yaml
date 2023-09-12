@@ -1,57 +1,56 @@
-version: '3'
-
+version: "3.9"
 services:
-  rabbitmq-node1:
-    container_name: rabbitmq-node1
-    hostname: rabbitmq-node1
+  rabbit1:
     image: rabbitmq:3.9.5-management-alpine
+    hostname: rabbit1
+    container_name: rabbit1
     environment:
-      - RABBITMQ_ERLANG_COOKIE=cookie
-      - RABBITMQ_NODENAME=rabbit@rabbitmq-node1
-      - RABBITMQ_USE_LONGNAME=true
+      RABBITMQ_ERLANG_COOKIE: "cookie"
+      RABBITMQ_NODENAME: rabbit1
+    volumes:
+      - ./TmpData/rabbitmq/data:/var/lib/rabbitmq
+      - ./mq:/root/mq
     ports:
-      - 5672:5672
-      - 15672:15672
-    volumes:
-      - ./TmpData/rabbitmq/rabbitmq-node1-data:/var/lib/rabbitmq
+      - "5672:5672"
+      - "15672:15672"
     networks:
-      rabbitmq-network:
-        aliases:
-          - rabbitmq-node1
+      rabbitmq-cluster:
 
-  rabbitmq-node2:
+  rabbit2:
     image: rabbitmq:3.9.5-management-alpine
-    container_name: rabbitmq-node2
-    hostname: rabbitmq-node2
+    hostname: rabbit2
+    container_name: rabbit2
+    depends_on:
+      - rabbit1
     environment:
-      - RABBITMQ_ERLANG_COOKIE=cookie
-      - RABBITMQ_NODENAME=rabbit@rabbitmq-node2
-      - RABBITMQ_USE_LONGNAME=true
-      - RABBITMQ_CLUSTER_NODE_TYPE=disc
-      - RABBITMQ_CLUSTER_DISC_RAM_NODE_NAME=rabbit@rabbitmq-node1
+      RABBITMQ_ERLANG_COOKIE: "cookie"
+      RABBITMQ_NODENAME: rabbit2
     volumes:
-      - ./TmpData/rabbitmq/rabbitmq-node2-data:/var/lib/rabbitmq
+      - ./TmpData/rabbitmq/data:/var/lib/rabbitmq
+      - ./mq:/root/mq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
     networks:
-      rabbitmq-network:
-        aliases:
-          - rabbitmq-node2
+      rabbitmq-cluster:
 
-  rabbitmq-node3:
+  rabbit3:
     image: rabbitmq:3.9.5-management-alpine
-    container_name: rabbitmq-node3
-    hostname: rabbitmq-node3
+    hostname: rabbit3
+    container_name: rabbit3
+    depends_on:
+      - rabbit1
     environment:
-      - RABBITMQ_ERLANG_COOKIE=cookie
-      - RABBITMQ_NODENAME=rabbit@rabbitmq-node3
-      - RABBITMQ_USE_LONGNAME=true
-      - RABBITMQ_CLUSTER_NODE_TYPE=disc
-      - RABBITMQ_CLUSTER_DISC_RAM_NODE_NAME=rabbit@rabbitmq-node1
+      RABBITMQ_ERLANG_COOKIE: "cookie"
+      RABBITMQ_NODENAME: rabbit3
     volumes:
-      - ./TmpData/rabbitmq/rabbitmq-node3-data:/var/lib/rabbitmq
+      - ./TmpData/rabbitmq/data:/var/lib/rabbitmq
+      - ./mq:/root/mq
+    ports:
+      - "5674:5672"
+      - "15674:15672"
     networks:
-      rabbitmq-network:
-        aliases:
-          - rabbitmq-node3
+      rabbitmq-cluster:
 
 networks:
-  rabbitmq-network:
+  rabbitmq-cluster:

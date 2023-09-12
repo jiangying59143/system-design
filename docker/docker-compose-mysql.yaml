@@ -93,7 +93,7 @@ services:
       - canal.instance.filter.regex=db0.t_user,db1.t_user
       - canal.mq.topic=db01
     #      - canal.serverMode=rabbitMQ
-    #      - rabbitmq.host=rabbitmq-node1
+    #      - rabbitmq.host=rabbit1
     #      - rabbitmq.virtual.host=/
     #      - rabbitmq.exchange=mysql.exchange
     #      - rabbitmq.username=guest
@@ -102,11 +102,11 @@ services:
     depends_on:
       - master1-slave1
       - master1-slave2
-      - rabbitmq-node2
-      - rabbitmq-node3
+      - rabbit2
+      - rabbit3
     links:
       - master1
-      - rabbitmq-node1
+      - rabbit1
     networks:
       - mysql-network
 

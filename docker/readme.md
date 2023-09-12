@@ -134,3 +134,19 @@ Container	创建的容器不会创建自己的网卡，配置自己的IP，而�
 `docker-compose -f docker-compose-rabbitmq.yaml -f docker-compose-mysql.yaml up -d`
 
 `docker-compose -f docker-compose-rabbitmq.yaml -f docker-compose-mysql.yaml down --remove-orphans`
+
+#### rabbitmq 集群
+`docker exec -it rabbit2 /bin/bash -c "rabbitmqctl stop_app;
+rabbitmqctl reset;  
+rabbitmqctl join_cluster rabbit1@rabbit1; 
+rabbitmqctl start_app;"`
+
+`docker exec -it rabbit3 /bin/bash -c "rabbitmqctl stop_app;
+rabbitmqctl reset;  
+rabbitmqctl join_cluster rabbit1@rabbit1;
+rabbitmqctl start_app;"`
+
+#### 设置数据同步策略
+`docker exec -it rabbit1 /bin/bash` 
+
+`rabbitmqctl set_policy my_ha "^" '{"ha-mode":"all"}' `
