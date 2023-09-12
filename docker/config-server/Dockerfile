@@ -7,4 +7,4 @@ FROM mysql:5.7
 COPY ./config-server/set-sysn-and-create-db-table.sh /root/start.sh
 
 # Run necessary services
-CMD ["/bin/bash", "/root/start.sh"]
+CMD ["/root/start.sh","/bin/bash"]

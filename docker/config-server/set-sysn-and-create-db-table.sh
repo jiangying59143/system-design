@@ -11,7 +11,6 @@ while true; do
   fi
 done
 
-echo "Running MySQL initialization script(测试过了 'master1-slave1'@'%' ,只能用IP, 不能用主机名)..."
 echo "# 设置用户 slave1"
 mysql -h master1 -uroot -proot -e "CREATE USER 'master1-slave1'@'%' IDENTIFIED BY 'master1-slave1'";
 mysql -h master1 -uroot -proot -e "grant replication slave, replication client on *.* to 'master1-slave1'@'%';";

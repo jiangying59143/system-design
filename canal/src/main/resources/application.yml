@@ -1,4 +1,6 @@
 # application.yml
+server:
+  port: 9002
 canal:
   server:
     hostname: localhost

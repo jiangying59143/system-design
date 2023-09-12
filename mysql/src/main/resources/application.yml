@@ -1,5 +1,6 @@
 # application.yml
-
+server:
+  port: 9001
 # two groups, each has one master and two slaves
 spring:
   shardingsphere:
@@ -8,37 +9,37 @@ spring:
       ds0:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3306/db0
+        jdbc-url: jdbc:mysql://localhost:3306/db0?useSSL=false
         username: root
         password: root
       ds1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3306/db1
+        jdbc-url: jdbc:mysql://localhost:3306/db1?useSSL=false
         username: root
         password: root
       slave01:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3307/db0
+        jdbc-url: jdbc:mysql://localhost:3307/db0?useSSL=false
         username: root
         password: root
       slave02:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3308/db0
+        jdbc-url: jdbc:mysql://localhost:3308/db0?useSSL=false
         username: root
         password: root
       slave11:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3307/db1
+        jdbc-url: jdbc:mysql://localhost:3307/db1?useSSL=false
         username: root
         password: root
       slave12:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://localhost:3308/db1
+        jdbc-url: jdbc:mysql://localhost:3308/db1?useSSL=false
         username: root
         password: root
     sharding:
