@@ -30,6 +30,12 @@
         </dependency>
 
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -40,6 +46,7 @@
         <module>mysql</module>
         <module>canal</module>
         <module>mq</module>
+        <module>mq_consumer</module>
     </modules>
 
     <dependencyManagement>
