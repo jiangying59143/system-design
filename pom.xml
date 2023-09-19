@@ -46,6 +46,7 @@
         <module>mysql</module>
         <module>canal</module>
         <module>mq</module>
+        <module>algorithm</module>
     </modules>
 
     <dependencyManagement>
