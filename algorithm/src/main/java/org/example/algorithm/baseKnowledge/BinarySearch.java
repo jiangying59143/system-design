@@ -57,4 +57,38 @@ public class BinarySearch {
         }
         return -1;
     }
+
+    //第四版
+
+    /**
+     * 获取最左位置或者最右位置
+     * @param nums
+     * @param target
+     * @param isLeftMost
+     * @return
+     */
+    public static int search4(int[] nums, int target, boolean isLeftMost){
+        int L = 0, R = nums.length - 1, m, ans = -1;
+        while(L <= R){
+            /** m = (L+R)/2
+             *  m = L+(R-L)/2
+             *  m = L+((R-L)>>1)
+             */
+            m = (L+R)>>>1;
+            if(target < nums[m]){
+                R = m-1;
+            }else if(nums[m] < target){
+                L = m+1;
+            }else{
+                if(isLeftMost){
+                    R = m-1;
+                }else{
+                    L = m+1;
+                }
+                ans = m;
+            }
+        }
+        return ans;
+    }
+
 }
