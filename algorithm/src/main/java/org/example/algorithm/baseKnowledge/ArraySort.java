@@ -146,37 +146,73 @@ public class ArraySort {
         }
     }
 
+    public static void quickSort(int[] arr){
+        quickSplit(arr, 0, arr.length-1);
+    }
+
+    private static void quickSplit(int[] arr, int left, int right){
+        if(left >= right){
+            return;
+        }
+        int pivot = left + (int)(Math.random() * (right-left+1));
+        int[] equalArea = getEqualArea(arr, left, pivot, right);
+//        System.out.printf("left: %d, right: %d, pivot: %d%n",left, right, pivot);
+//        System.out.println(Arrays.toString(arr));
+        quickSplit(arr, left, equalArea[0]-1);
+        quickSplit(arr, equalArea[1] + 1, right);
+    }
+
+    private static int[] getEqualArea(int[] arr, int left, int pivot, int right){
+        swap(arr, pivot, right);
+        int i = left;
+        // 左边区域到不了的位置
+        // todo
+//        int leftIndex = -1;
+        int leftIndex = left - 1;
+        // 右边区域到不了的位置
+        int rightIndex = right;
+        while(i<rightIndex){
+            if(arr[i] < arr[right]){
+                swap(arr, ++leftIndex, i++);
+            }else if(arr[i] > arr[right]){
+                swap(arr, --rightIndex, i);
+            }else{
+                i++;
+            }
+        }
+        // todo 如果 [7,1] arr[pivot] = 1 程序到这里 rightIndex = -1 下面一行代码会边界报错
+        // swap(arr, --rightIndex, right);
+        swap(arr, rightIndex, right);
+        return new int[]{leftIndex+1, rightIndex};
+    }
+
     public static void main(String[] args) {
         System.out.println((0-1)/2);
         List<Consumer<int[]>> consumerList = Arrays.asList(
 //                ints -> merge(ints),
-                ints -> heap(ints)
+                ints -> quickSort(ints)
         );
 
         for (Consumer<int[]> consumer : consumerList) {
-            test(consumer);
+            test(consumer, getTestData());
         }
     }
 
 
-    public static void test(Consumer consumer){
-        System.out.printf("sort %s start\n", consumer.getClass().getSimpleName());
-        int[] arr = null;
-//        consumer.accept(arr);
-//        System.out.println(Arrays.toString(arr));
+    private static void test(Consumer consumer, List<int[]> testDataList){
+        for (int[] arr : testDataList) {
+            System.out.println("orgin: " + Arrays.toString(arr));
+            consumer.accept(arr);
+            System.out.println("sorted: " + Arrays.toString(arr));
+            System.out.println();
+        }
+    }
 
-        arr = new int[]{};
-        consumer.accept(arr);
-        System.out.println(Arrays.toString(arr));
-
-        arr = new int[]{9,3,7,2,5,8,1,4};
-        consumer.accept(arr);
-        System.out.println(Arrays.toString(arr));
-
-        arr = new int[]{10,9,3,7,2,5,8,1,4};
-        consumer.accept(arr);
-        System.out.println(Arrays.toString(arr));
-
-        System.out.printf("sort %s end\n", consumer.getClass().getSimpleName());
+    public static List<int[]> getTestData(){
+        return Arrays.asList(
+                new int[]{},
+                new int[]{9,3,7,2,5,8,1,4},
+                new int[]{10,9,3,7,2,5,8,1,4}
+        );
     }
 }
