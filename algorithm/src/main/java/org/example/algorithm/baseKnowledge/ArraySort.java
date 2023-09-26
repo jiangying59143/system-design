@@ -99,13 +99,58 @@ public class ArraySort {
     }
 
     public static void heap(int[] arr){
+        if(arr == null || arr.length <= 1){
+            return;
+        }
+        // n*log(n)
+//        for (int i = 0; i < arr.length; i++) {
+//           heapUp(arr, i);
+//        }
+
+        // log(n)
+        for (int r = arr.length-1; r >= 0; r--) {
+            heapify(arr, r, arr.length);
+        }
+//        System.out.println(Arrays.toString(arr));
+
+        int heapsize = arr.length;
+        swap(arr, 0, --heapsize);
+        while(heapsize > 0){
+            heapify(arr, 0, heapsize);
+            swap(arr, 0, --heapsize);
+        }
+    }
+
+    private static void heapUp(int[] arr, int index){
+        while(arr[index] > arr[(index-1)/2]){
+            swap(arr, index, (index-1)/2);
+            index = (index-1)/2;
+        }
+    }
+
+    private static void heapify(int[] arr, int index, int heapSize){
+        int left = index * 2 + 1, right = left+1;
+        while(left < heapSize){
+           int larger = right > heapSize-1 || arr[left] > arr[right] ? left : right;
+           if(arr[index] >= arr[larger]){
+               break;
+           }
+           swap(arr, index, larger);
+
+           // TODO 漏掉了
+           index = larger;
+
+           left =  larger * 2 +1;
+           right = left+1;
+
+        }
     }
 
     public static void main(String[] args) {
         System.out.println((0-1)/2);
         List<Consumer<int[]>> consumerList = Arrays.asList(
 //                ints -> merge(ints),
-                ints -> mergeDownUp(ints)
+                ints -> heap(ints)
         );
 
         for (Consumer<int[]> consumer : consumerList) {
@@ -119,15 +164,19 @@ public class ArraySort {
         int[] arr = null;
 //        consumer.accept(arr);
 //        System.out.println(Arrays.toString(arr));
+
         arr = new int[]{};
         consumer.accept(arr);
         System.out.println(Arrays.toString(arr));
+
         arr = new int[]{9,3,7,2,5,8,1,4};
         consumer.accept(arr);
         System.out.println(Arrays.toString(arr));
+
         arr = new int[]{10,9,3,7,2,5,8,1,4};
         consumer.accept(arr);
         System.out.println(Arrays.toString(arr));
+
         System.out.printf("sort %s end\n", consumer.getClass().getSimpleName());
     }
 }
