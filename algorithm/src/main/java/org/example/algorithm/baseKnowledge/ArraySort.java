@@ -1,6 +1,8 @@
 package org.example.algorithm.baseKnowledge;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -186,11 +188,60 @@ public class ArraySort {
         return new int[]{leftIndex+1, rightIndex};
     }
 
+    public static void countSort(int[] arr){
+        int max = 0;
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(arr[i], max);
+        }
+        int[] count = new int[max+1];
+        for (int i = 0; i < arr.length; i++) {
+            count[arr[i]]++;
+        }
+        int i = 0, j = 0;
+        while(i<arr.length){
+            while(count[j] > 0){
+                arr[i++] = j;
+                count[j]--;
+            }
+            j++;
+        }
+    }
+
+    public static void bucketSort(int[] arr){
+        if(arr == null || arr.length <= 1){
+            return;
+        }
+        int max = arr[0],min = arr[0];
+        for (int i = 0; i < arr.length; i++) {
+            min =  Math.min(min, arr[i]);
+            max = Math.max(max, arr[i]);
+        }
+        int bucketLength = (max-min)/arr.length + 1;
+        List<List<Integer>> bucketList = new ArrayList<>(bucketLength);
+        for (int i = 0; i < bucketLength; i++) {
+            bucketList.add(new ArrayList<>());
+        }
+        for (int i = 0; i < arr.length; i++) {
+            int bucketIndex = (arr[i]-min)/arr.length;
+            bucketList.get(bucketIndex).add(arr[i]);
+        }
+
+        int index = 0;
+        for (int i = 0; i < bucketList.size(); i++) {
+            if(!bucketList.get(i).isEmpty()) {
+                Collections.sort(bucketList.get(i));
+                for (int j = 0; j < bucketList.get(i).size(); j++) {
+                    arr[index++] = bucketList.get(i).get(j);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println((0-1)/2);
         List<Consumer<int[]>> consumerList = Arrays.asList(
 //                ints -> merge(ints),
-                ints -> quickSort(ints)
+                ints -> bucketSort(ints)
         );
 
         for (Consumer<int[]> consumer : consumerList) {
