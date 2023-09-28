@@ -1,9 +1,6 @@
 package org.example.algorithm.baseKnowledge;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ArraySort {
@@ -149,7 +146,24 @@ public class ArraySort {
     }
 
     public static void quickSort(int[] arr){
-        quickSplit(arr, 0, arr.length-1);
+        quickSortLoop(arr, 0, arr.length-1);
+    }
+
+    public static void quickSortLoop(int[] arr, int left, int right){
+        LinkedList<int[]> stack = new LinkedList<>();
+        stack.push(new int[]{left, right});
+        while(!stack.isEmpty()){
+            int[] ele = stack.pop();
+            left = ele[0];
+            right = ele[1];
+            if(left >= right){
+                continue;
+            }
+            int pivot = left + (int)(Math.random() * (right-left+1));
+            int[] equalArea = getEqualArea(arr, left, pivot, right);
+            stack.push(new int[]{left, equalArea[0]-1});
+            stack.push(new int[]{equalArea[1]+1, right});
+        }
     }
 
     private static void quickSplit(int[] arr, int left, int right){
@@ -272,6 +286,7 @@ public class ArraySort {
             }
             System.arraycopy(help, 0, arr, 0, help.length);
             initArr(bucket);
+            //todo not need init help
         }
     }
 
@@ -289,7 +304,7 @@ public class ArraySort {
         System.out.println((0-1)/2);
         List<Consumer<int[]>> consumerList = Arrays.asList(
 //                ints -> merge(ints),
-                ints -> radixSort(ints)
+                ints -> quickSort(ints)
         );
 
         for (Consumer<int[]> consumer : consumerList) {
