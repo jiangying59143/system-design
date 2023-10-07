@@ -1,6 +1,6 @@
 package org.example.algorithm.baseKnowledge;
 
-import org.example.algorithm.dataStructure.BinaryTreeNode;
+import org.example.algorithm.dataStructure.TreeNode;
 
 import java.util.LinkedList;
 
@@ -10,7 +10,7 @@ public class BinaryTreeTraversal {
         in,
         post
     }
-    public static void order(BinaryTreeNode node,Order order){
+    public static void order(TreeNode node, Order order){
         if(node ==  null){
             return;
         }
@@ -27,11 +27,11 @@ public class BinaryTreeTraversal {
         }
     }
 
-    public static void preOrder(BinaryTreeNode node){
+    public static void preOrder(TreeNode node){
         if(node == null){
             return;
         }
-        LinkedList<BinaryTreeNode> stack  =  new LinkedList<>();
+        LinkedList<TreeNode> stack  =  new LinkedList<>();
         stack.push(node);
         while(!stack.isEmpty()){
             node = stack.pop();
@@ -41,11 +41,11 @@ public class BinaryTreeTraversal {
         }
     }
 
-    public static void inorder(BinaryTreeNode node){
+    public static void inorder(TreeNode node){
         if(node == null){
             return;
         }
-        LinkedList<BinaryTreeNode> stack  =  new LinkedList<>();
+        LinkedList<TreeNode> stack  =  new LinkedList<>();
         while(node != null || !stack.isEmpty()){
             while(node != null){
                 stack.push(node);
@@ -57,12 +57,12 @@ public class BinaryTreeTraversal {
         }
     }
 
-    public static void postorder(BinaryTreeNode node){
+    public static void postorder(TreeNode node){
         if(node == null){
             return;
         }
-        LinkedList<BinaryTreeNode> stack  =  new LinkedList<>();
-        LinkedList<BinaryTreeNode> stack2  =  new LinkedList<>();
+        LinkedList<TreeNode> stack  =  new LinkedList<>();
+        LinkedList<TreeNode> stack2  =  new LinkedList<>();
         stack.push(node);
         while(!stack.isEmpty()){
             node = stack.pop();
@@ -75,13 +75,13 @@ public class BinaryTreeTraversal {
         }
     }
 
-    public static void morris(BinaryTreeNode node, Order order){
+    public static void morris(TreeNode node, Order order){
         if(node == null){
             return;
         }
-        BinaryTreeNode head  = node;
+        TreeNode head  = node;
         while(node != null){
-            BinaryTreeNode mostRight = node.left;
+            TreeNode mostRight = node.left;
             if(mostRight != null){
                 while(mostRight.right != null && mostRight.right != node){
                     mostRight =  mostRight.right;
@@ -105,9 +105,9 @@ public class BinaryTreeTraversal {
         System.out.println();
     }
 
-    private static void morrisPosPrint(BinaryTreeNode node){
+    private static void morrisPosPrint(TreeNode node){
         node = reverseList(node);
-        BinaryTreeNode head = node;
+        TreeNode head = node;
         while(node != null){
             System.out.print(node.val + "  ");
             node = node.right;
@@ -116,8 +116,8 @@ public class BinaryTreeTraversal {
 
     }
 
-    private static BinaryTreeNode reverseList(BinaryTreeNode node){
-        BinaryTreeNode dummyHead = new BinaryTreeNode(-1),next;
+    private static TreeNode reverseList(TreeNode node){
+        TreeNode dummyHead = new TreeNode(-1),next;
         while(node!= null){
             next = dummyHead.right;
             dummyHead.right = node;
@@ -128,12 +128,12 @@ public class BinaryTreeTraversal {
     }
 
     public static void main(String[] args) {
-        BinaryTreeNode root = new BinaryTreeNode(1);
-        BinaryTreeNode left = root.left(2);
-        BinaryTreeNode right = root.right(3);
+        TreeNode root = new TreeNode(1);
+        TreeNode left = root.left(2);
+        TreeNode right = root.right(3);
         left.left(4);left.right(5);
         right.left(6); right.right(7);
-        BinaryTreeNode.printTree(root);
+        TreeNode.printTree(root);
         preOrder(root);
         System.out.println();
         inorder(root);
@@ -144,6 +144,6 @@ public class BinaryTreeTraversal {
         morris(root, Order.pre);
         morris(root, Order.in);
         morris(root, Order.post);
-        BinaryTreeNode.printTree(root);
+        TreeNode.printTree(root);
     }
 }

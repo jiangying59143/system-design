@@ -286,7 +286,7 @@ public class ArraySort {
             }
             System.arraycopy(help, 0, arr, 0, help.length);
             initArr(bucket);
-            //todo not need init help
+            //todo not need init help[]
         }
     }
 

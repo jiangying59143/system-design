@@ -21,7 +21,7 @@ public class BinarySearch {
         return -1;
     }
 
-    //第二版
+    //第二版 出循环需要验证边界版本
     public static int search2(int[] nums, int target){
         int L = 0, R = nums.length - 1, m;
         //不同于第一版 L <= R
@@ -59,7 +59,6 @@ public class BinarySearch {
     }
 
     //第四版
-
     /**
      * 获取最左位置或者最右位置
      * @param nums
