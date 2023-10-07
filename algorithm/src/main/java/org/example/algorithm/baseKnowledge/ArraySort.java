@@ -1,9 +1,6 @@
 package org.example.algorithm.baseKnowledge;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ArraySort {
@@ -149,7 +146,24 @@ public class ArraySort {
     }
 
     public static void quickSort(int[] arr){
-        quickSplit(arr, 0, arr.length-1);
+        quickSortLoop(arr, 0, arr.length-1);
+    }
+
+    public static void quickSortLoop(int[] arr, int left, int right){
+        LinkedList<int[]> stack = new LinkedList<>();
+        stack.push(new int[]{left, right});
+        while(!stack.isEmpty()){
+            int[] ele = stack.pop();
+            left = ele[0];
+            right = ele[1];
+            if(left >= right){
+                continue;
+            }
+            int pivot = left + (int)(Math.random() * (right-left+1));
+            int[] equalArea = getEqualArea(arr, left, pivot, right);
+            stack.push(new int[]{left, equalArea[0]-1});
+            stack.push(new int[]{equalArea[1]+1, right});
+        }
     }
 
     private static void quickSplit(int[] arr, int left, int right){
@@ -237,11 +251,60 @@ public class ArraySort {
         }
     }
 
+    public static void radixSort(int[] arr){
+        if(arr == null || arr.length <= 1){
+            return;
+        }
+        processRadixSort(arr, getMaxBit(arr));
+    }
+
+    private static int getMaxBit(int[] arr){
+        int max = arr[0];
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+        }
+        int maxBit = 0;
+        while(max > 0){
+            max /= 10;
+            maxBit++;
+        }
+        return maxBit;
+    }
+
+    private static void processRadixSort(int[] arr, int maxBit){
+        int[] bucket = new int[10], help = new int[arr.length];
+        for (int b = 1; b <= maxBit; b++) {
+            for (int i = 0; i < arr.length; i++) {
+               bucket[getDigit(arr[i], b)]++;
+            }
+            for (int i = 1; i < bucket.length; i++) {
+               bucket[i] += bucket[i-1];
+            }
+//            System.out.println(Arrays.toString(bucket));
+            for (int i = arr.length - 1; i >= 0; i--) {
+               help[--bucket[getDigit(arr[i], b)]] = arr[i];
+            }
+            System.arraycopy(help, 0, arr, 0, help.length);
+            initArr(bucket);
+            //todo not need init help
+        }
+    }
+
+    private static void initArr(int[] arr){
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = 0;
+        }
+    }
+
+    private static int getDigit(int x, int bit){
+        return x / (int)Math.pow(10, bit-1) % 10;
+    }
+
     public static void main(String[] args) {
         System.out.println((0-1)/2);
         List<Consumer<int[]>> consumerList = Arrays.asList(
 //                ints -> merge(ints),
-                ints -> bucketSort(ints)
+                ints -> quickSort(ints)
         );
 
         for (Consumer<int[]> consumer : consumerList) {
