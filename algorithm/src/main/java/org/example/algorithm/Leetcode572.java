@@ -4,18 +4,18 @@ import org.example.algorithm.dataStructure.TreeNode;
 
 public class Leetcode572 {
     public static boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        return process(root, subRoot, subRoot);
+    }
+
+    private static boolean process(TreeNode root, TreeNode subRoot, TreeNode origin){
         if(root == null && subRoot == null){
             return true;
         }
-        if(root == null && subRoot != null || root!= null && subRoot == null){
+        if(root == null || subRoot == null){
             return false;
         }
-        if(root.val == subRoot.val){
-            //一定要是并且关系
-            return isSubtree(root.left, subRoot.left) && isSubtree(root.right, subRoot.right);
-        }else{
-            return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
-        }
+        return root.val == subRoot.val && isSubtree(root.left, subRoot.left) && isSubtree(root.right, subRoot.right)
+                || isSubtree(root.left, origin) || isSubtree(root.right, origin);
     }
 
     public static void main(String[] args) {
