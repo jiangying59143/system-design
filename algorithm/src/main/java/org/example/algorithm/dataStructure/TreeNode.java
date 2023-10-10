@@ -25,13 +25,6 @@ public class TreeNode {
         return node;
     }
 
-    @Override
-    public String toString() {
-        return val + ":"
-                + "left:" + (this.left == null ?  "" : this.left.toString())
-                + "right:" + (this.right == null ?  "" : this.right.toString());
-    }
-
     public static void printTree(TreeNode tree){
         var pt = new PrettyPrintTree<TreeNode>(
                 (x) -> Arrays.asList(x.left, x.right),
