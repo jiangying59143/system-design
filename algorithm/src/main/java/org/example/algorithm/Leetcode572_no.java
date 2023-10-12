@@ -2,7 +2,7 @@ package org.example.algorithm;
 
 import org.example.algorithm.dataStructure.TreeNode;
 
-public class Leetcode572 {
+public class Leetcode572_no {
     public static boolean isSubtree(TreeNode root, TreeNode subRoot) {
         return process(root, subRoot, subRoot);
     }

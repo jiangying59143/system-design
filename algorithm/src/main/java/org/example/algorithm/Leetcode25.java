@@ -1,25 +1,8 @@
 package org.example.algorithm;
 
+import org.example.algorithm.dataStructure.ListNode;
+
 public class Leetcode25 {
-
-    public static class ListNode {
-      int val;
-      ListNode next;
-      ListNode() {}
-      ListNode(int val) { this.val = val; }
-      ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-
-        public ListNode next(int val){
-            ListNode listNode = new ListNode(val);
-            next = listNode;
-            return listNode;
-        }
-
-        @Override
-        public String toString() {
-            return val + "," + (next == null ? "null" : next.toString()) ;
-        }
-    }
 
     public static ListNode reverseKGroup(ListNode head, int k) {
         // prev 是fake head 和 反转后的tail节点
