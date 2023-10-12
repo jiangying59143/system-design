@@ -1,0 +1,11 @@
+package org.example.algorithm.dataStructure;
+
+import java.util.Arrays;
+
+public class Array {
+    public static void print(int[] ... numArray){
+        for (int[] ints : numArray) {
+            System.out.println(Arrays.toString(ints));
+        }
+    }
+}
