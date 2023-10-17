@@ -10,7 +10,7 @@ public class Leetcode5 {
             if(expandMaxLen > maxLen){
                 maxLen = expandMaxLen;
                 pos[0] = i - (maxLen-1)/2;
-                pos[1] = i - maxLen/2;
+                pos[1] = i + maxLen/2;
             }
         }
         return s.substring(pos[0], pos[1]+1);
