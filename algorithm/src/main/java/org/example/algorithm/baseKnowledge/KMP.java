@@ -9,10 +9,8 @@ public class KMP {
         int j=0, i=1;
         while(i < next.length){
             if(p[i] == p[j]) next[i++] = (j++) + 1;
-            else{
-                if(j >= 1) j = next[j-1];
-                else next[i++] = 0;
-            }
+            else if(j == 0) next[i++] = 0;
+            else j = next[j-1];
         }
         return next;
     }
@@ -29,13 +27,9 @@ public class KMP {
             if(s[i] == p[j]){
                 i++;
                 j++;
-            }else if(j > 0){
-                // j-1 是把 j++ 的 减掉
-                j = next[j-1];
-            }else{
-                // s[i] != p[j] && j==0
-                i++;
-            }
+            }else if(j == 0) i++;
+            else j = next[j-1];
+
             if(j == p.length){
                 return i-j;
             }
