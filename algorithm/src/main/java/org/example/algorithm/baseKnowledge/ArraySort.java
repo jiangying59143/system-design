@@ -106,7 +106,7 @@ public class ArraySort {
 //           heapUp(arr, i);
 //        }
 
-        // log(n)
+        // n
         for (int r = arr.length-1; r >= 0; r--) {
             heapify(arr, r, arr.length);
         }
@@ -128,20 +128,17 @@ public class ArraySort {
     }
 
     private static void heapify(int[] arr, int index, int heapSize){
-        int left = index * 2 + 1, right = left+1;
-        while(left < heapSize){
-           int larger = right > heapSize-1 || arr[left] > arr[right] ? left : right;
-           if(arr[index] >= arr[larger]){
+        // 比最后的头节点还小或者相等
+        while(index <= (heapSize-2)/2){
+            int left = 2*index + 1;
+            int larger = left+1 > heapSize-1 || arr[left] > arr[left+1] ? left : left+1;
+            if(arr[index] >= arr[larger]){
                break;
-           }
-           swap(arr, index, larger);
+            }
+            swap(arr, index, larger);
 
-           // TODO 漏掉了
-           index = larger;
-
-           left =  larger * 2 +1;
-           right = left+1;
-
+            // TODO 漏掉了
+            index = larger;
         }
     }
 
@@ -180,13 +177,13 @@ public class ArraySort {
 
     private static int[] getEqualArea(int[] arr, int left, int pivot, int right){
         swap(arr, pivot, right);
-        int i = left;
+        int leftIndex = left - 1, i = left, rightIndex = right;
         // 左边区域到不了的位置
         // todo
 //        int leftIndex = -1;
-        int leftIndex = left - 1;
+//        int leftIndex = left - 1;
         // 右边区域到不了的位置
-        int rightIndex = right;
+//        int rightIndex = right;
         while(i<rightIndex){
             if(arr[i] < arr[right]){
                 swap(arr, ++leftIndex, i++);
@@ -203,21 +200,26 @@ public class ArraySort {
     }
 
     public static void countSort(int[] arr){
+        //1. 求最大值
         int max = 0;
         for (int i = 0; i < arr.length; i++) {
             max = Math.max(arr[i], max);
         }
+        //2.初始化
         int[] count = new int[max+1];
+
+        //3. 填充
         for (int i = 0; i < arr.length; i++) {
             count[arr[i]]++;
         }
-        int i = 0, j = 0;
-        while(i<arr.length){
-            while(count[j] > 0){
-                arr[i++] = j;
-                count[j]--;
+
+        //4.回填
+        int j = 0;
+        for (int arri = 0; arri < count.length; arri++) {
+            while(count[arri] > 0){
+                arr[j++] = arri;
+                count[arri]--;
             }
-            j++;
         }
     }
 
@@ -225,28 +227,30 @@ public class ArraySort {
         if(arr == null || arr.length <= 1){
             return;
         }
+        // 1. 求最小值和最大指
         int max = arr[0],min = arr[0];
         for (int i = 0; i < arr.length; i++) {
             min =  Math.min(min, arr[i]);
             max = Math.max(max, arr[i]);
         }
+        // 2. 初始化
         int bucketLength = (max-min)/arr.length + 1;
         List<List<Integer>> bucketList = new ArrayList<>(bucketLength);
         for (int i = 0; i < bucketLength; i++) {
             bucketList.add(new ArrayList<>());
         }
+        //3. 填充
         for (int i = 0; i < arr.length; i++) {
             int bucketIndex = (arr[i]-min)/arr.length;
             bucketList.get(bucketIndex).add(arr[i]);
         }
 
+        //4. 回填
         int index = 0;
         for (int i = 0; i < bucketList.size(); i++) {
-            if(!bucketList.get(i).isEmpty()) {
-                Collections.sort(bucketList.get(i));
-                for (int j = 0; j < bucketList.get(i).size(); j++) {
-                    arr[index++] = bucketList.get(i).get(j);
-                }
+            Collections.sort(bucketList.get(i));
+            for (int j = 0; j < bucketList.get(i).size(); j++) {
+                arr[index++] = bucketList.get(i).get(j);
             }
         }
     }
