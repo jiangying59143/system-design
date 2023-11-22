@@ -37,10 +37,10 @@ public class Leetcode46 {
     public static void main(String[] args) {
         int[] nums; List<List<Integer>> res;
 
-        nums = new int[]{1,2,3,4};
+        nums = new int[]{1,2,3,4,5};
         res = new Leetcode46().permute(nums);
         for (List<Integer> re : res) {
-            System.out.print(Arrays.toString(re.toArray()));
+            System.out.println(Arrays.toString(re.toArray()));
         }
         System.out.println();
     }
