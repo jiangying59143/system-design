@@ -26,4 +26,21 @@ public class ListNode {
         }
         System.out.println("null");
     }
+
+    public static void print(ListNode listNode){
+        if(listNode == null){
+            System.out.println("null");
+            return;
+        }
+        listNode.print();
+    }
+
+    public static ListNode generate(int[] nums){
+        ListNode head = new ListNode(nums[0]), cur = head;
+        for (int i = 1; i < nums.length; i++) {
+            cur.next = new ListNode(nums[i]);
+            cur = cur.next;
+        }
+        return head;
+    }
 }
