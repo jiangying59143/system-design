@@ -1,7 +1,5 @@
 package org.example.algorithm;
 
-import org.example.algorithm.dataStructure.Array;
-
 public class Leetcode10 {
     public static boolean isMatchOfficial(String s, String p) {
         int m = s.length();
@@ -12,14 +10,9 @@ public class Leetcode10 {
         for (int i = 0; i <= m; ++i) {
             for (int j = 1; j <= n; ++j) {
                 if (p.charAt(j - 1) == '*') {
-                    f[i][j] = f[i][j - 2];
-                    if (matches(s, p, i, j - 1)) {
-                        f[i][j] = f[i][j] || f[i - 1][j];
-                    }
+                    f[i][j] = matches(s, p, i, j - 1) && f[i - 1][j] || f[i][j - 2] ;
                 } else {
-                    if (matches(s, p, i, j)) {
-                        f[i][j] = f[i - 1][j - 1];
-                    }
+                    f[i][j] = matches(s, p, i, j) && f[i - 1][j - 1];
                 }
             }
         }
