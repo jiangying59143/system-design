@@ -48,7 +48,8 @@ public class Leetcode5 {
 
         StringBuilder sb = new StringBuilder();
         for (int i = start; i <= end; i++) {
-            if(s.charAt(i) != '#'){
+//            if(s.charAt(i) != '#'){
+            if((i - start) % 2 == 1){
                 sb.append(s.charAt(i));
             }
         }
@@ -63,6 +64,16 @@ public class Leetcode5 {
             sb.append("#");
         }
         return sb.toString();
+    }
+
+    private static String getManacherStr2(String s) {
+        StringBuffer t = new StringBuffer("#");
+        for (int i = 0; i < s.length(); ++i) {
+            t.append(s.charAt(i));
+            t.append('#');
+        }
+        t.append('#');
+        return t.toString();
     }
 
     private static int expandToMax(String s, int i, int j){
@@ -86,5 +97,7 @@ public class Leetcode5 {
         System.out.println("中心扩展方法 ： " + longestPalindrome(s));
         System.out.println("manacher方法 ： " + longestPalindrome1(s));
         System.out.println("-----------------------------------------");
+
+        System.out.println(getManacherStr2("aa"));
     }
 }
