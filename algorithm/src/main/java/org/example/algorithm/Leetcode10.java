@@ -19,6 +19,27 @@ public class Leetcode10 {
         return f[m][n];
     }
 
+    public static boolean isMatch3(String s, String p) {
+        return process(s, p, s.length(), p.length());
+    }
+
+    //按照字符串长度
+    private static boolean process(String s, String p, int si, int pi){
+        if(si == 0 && pi == 0) return true;
+        if(si < 0 || pi < 0) return false;
+//        if(si == 0 || pi == 0) return false;  // s = ""; p="a*"; =>true
+        if(pi == 0) return false;
+
+        if(p.charAt(pi-1) == '*') {
+            if(process(s, p, si, pi-2) || matches(s, p, si, pi-1) && process(s, p, si-1, pi))
+                return true;
+        }else if(process(s, p, si-1, pi-1) && matches(s, p, si, pi)){
+            return true;
+        }
+
+        return false;
+    }
+
     public static boolean matches(String s, String p, int i, int j) {
         if (i == 0) {
             return false;
@@ -96,5 +117,6 @@ public class Leetcode10 {
         System.out.println(isMatchOfficial(s, p));
         System.out.println(isMatch(s, p));
         System.out.println(isMatch2(s, p));
+        System.out.println(isMatch3(s, p));
     }
 }
