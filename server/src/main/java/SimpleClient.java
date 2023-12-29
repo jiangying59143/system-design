@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class SimpleClient {
-    private String serverResponse(int reqIndex){
+    private String serverResponse(String IP, int reqIndex){
         Socket socket = new Socket();
         StringBuilder sb = new StringBuilder();
         try {
             // 模拟客户端请求
-            socket.connect(new InetSocketAddress("localhost", 18888), 5000);
+            socket.connect(new InetSocketAddress(IP, 18888), 5000);
             OutputStream outputStream = socket.getOutputStream();
             String request = "request " + reqIndex;
             outputStream.write(request.getBytes());
@@ -36,12 +36,14 @@ public class SimpleClient {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        long startTime = System.currentTimeMillis();
         ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
         SimpleClient simpleClient = new SimpleClient();
         List<Callable<String>> callableList = new ArrayList<>();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 50000; i++) {
             int finalI = i;
-            callableList.add(()->simpleClient.serverResponse(finalI));
+            //172.21.231.91
+            callableList.add(()->simpleClient.serverResponse( "localhost",finalI));
         }
         List<Future<String>> futureList = executorService.invokeAll(callableList);
         futureList.stream().forEach(future-> {
@@ -53,5 +55,9 @@ public class SimpleClient {
                 throw new RuntimeException(e);
             }
         });
+        long endTime = System.currentTimeMillis();
+        long sec = (endTime - startTime) / 1000;
+        System.out.println(sec);
     }
+
 }
