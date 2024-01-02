@@ -48,6 +48,7 @@
         <module>mq_consumer</module>
         <module>algorithm</module>
         <module>server</module>
+        <module>uniquekey</module>
     </modules>
 
     <dependencyManagement>
