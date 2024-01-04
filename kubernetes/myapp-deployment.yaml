@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-demo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-demo
+  template:
+    metadata:
+      labels:
+        app: springboot-demo
+    spec:
+      containers:
+        - name: springboot-demo
+          image: localhost:5000/springboot-demo  # 替换为你的镜像名称和标签
+          ports:
+            - containerPort: 8080
