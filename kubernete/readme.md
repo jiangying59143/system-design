@@ -1,3 +1,5 @@
+`kubectl config get-contexts`
+
 通过获取集群状态的方法，检查是否已恰当地配置了 kubectl：
 
 ```
@@ -42,7 +44,7 @@ delete services and ingress
 
 安装ingress控制器
 
-`kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml`
+`kubectl apply -f ingress-nginx-deployment.yaml`
 
 `kubectl get ingressClass`
 
@@ -55,7 +57,13 @@ delete services and ingress
 
 `kubectl get storageClass`
 
-`kubectl apply -f registry-pv.yaml`
+`kubectl apply -f docker-registry.yaml`
 
-`kubectl apply -f registry-deployment-service.yaml`
+`kubectl get pods -n docker-registry`
+
+`kubectl describe pod your-pod-name -n docker-registry`
+
+`kubectl delete pod your-pod-name -n docker-registry`
+
+`kubectl describe node docker-desktop`
 
