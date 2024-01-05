@@ -16,6 +16,7 @@
 ```
 
 3. 也可以通过下面的配置 然后执行 `mvn compile jib:build`
+**但是目前 Jib 工具支持的最高版本是 JDK 11**
 ```
 <plugin>
     <groupId>com.google.cloud.tools</groupId>
