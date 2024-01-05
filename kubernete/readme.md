@@ -44,7 +44,18 @@ delete services and ingress
 
 `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml`
 
+`kubectl get ingressClass`
+
+在[ingress-example.yaml](ingress-example.yaml)中添加ingressClassName: nginx
+
 `kubectl apply -f ingress-example.yaml`
 
-`kubectl get ingressClass`
+
+安装docker image registry
+
+`kubectl get storageClass`
+
+`kubectl apply -f registry-pv.yaml`
+
+`kubectl apply -f registry-deployment-service.yaml`
 

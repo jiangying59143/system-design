@@ -63,4 +63,11 @@ spec:
                 name: bar-service
                 port:
                   number: 8080
+          - pathType: Prefix
+            path: /registry
+            backend:
+              service:
+                name: registry
+                port:
+                  number: 5000
 ---
