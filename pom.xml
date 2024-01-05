@@ -49,6 +49,7 @@
         <module>algorithm</module>
         <module>server</module>
         <module>uniquekey</module>
+        <module>nginx</module>
     </modules>
 
     <dependencyManagement>
