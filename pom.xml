@@ -49,6 +49,8 @@
         <module>algorithm</module>
         <module>server</module>
         <module>uniquekey</module>
+        <module>nginx</module>
+        <module>springboot-demo</module>
     </modules>
 
     <dependencyManagement>
