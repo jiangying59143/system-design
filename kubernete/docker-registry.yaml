@@ -5,13 +5,13 @@ metadata:
   name: docker-registry
 ---
 #需要自定义storageclass
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: local-storage
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Retain
+#apiVersion: storage.k8s.io/v1
+#kind: StorageClass
+#metadata:
+#  name: local-storage
+#provisioner: kubernetes.io/no-provisioner
+#volumeBindingMode: WaitForFirstConsumer
+#reclaimPolicy: Retain
 ---
 #定义一个pv，使用此storage class
 apiVersion: v1
@@ -20,23 +20,24 @@ metadata:
   name: docker-registry-pv
   labels:
     pv: docker-registry-pv
+  namespace: docker-registry
 spec:
   capacity:
     storage: 5Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
-  local:
-    path: ./registry-data
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - master
+  storageClassName: hostpath
+  hostPath:
+    path: "D:/k8s/mount"
+#  nodeAffinity:
+#    required:
+#      nodeSelectorTerms:
+#        - matchExpressions:
+#            - key: kubernetes.io/hostname
+#              operator: In
+#              values:
+#                - docker-desktop
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -46,10 +47,10 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 3Gi
+      storage: 5Gi
   accessModes:
     - ReadWriteMany
-  storageClassName: local-storage
+  storageClassName: hostpath
   selector:
     matchLabels:
       pv: docker-registry-pv
@@ -59,41 +60,41 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: docker-registry
-  name: docker-registry
+    app: docker-images-registry
+  name: docker-images-registry
   namespace: docker-registry
 spec:
   replicas: 1
-  revisionHistoryLimit: 5
+#  revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: docker-registry
+      app: docker-images-registry
   template:
     metadata:
       labels:
-        app: docker-registry
+        app: docker-images-registry
     spec:
-      securityContext:
-        runAsUser: 0
+#      securityContext:
+#        runAsUser: 0
       containers:
-        - name: docker-registry
-          image: registry:2
-          imagePullPolicy: IfNotPresent
+        - name: docker-images-registry
+          image: registry
+#          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
-              name: web
-              protocol: TCP
-          resources:
-            requests:
-              memory: 200Mi
-              cpu: "0.1"
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
+#              name: web
+#              protocol: TCP
+#          resources:
+#            requests:
+#              memory: 200Mi
+#              cpu: "0.1"
+#          terminationMessagePath: /dev/termination-log
+#          terminationMessagePolicy: File
           volumeMounts:
-            - mountPath: /var/lib/registry/
-              name: docker-registry-data
+            - mountPath: "/var/lib/registry"
+              name: registry-storage
       volumes:
-        - name: docker-registry-data
+        - name: registry-storage
           persistentVolumeClaim:
             claimName: docker-registry-pvc
 ---
@@ -109,5 +110,5 @@ spec:
       protocol: TCP
       targetPort: 5000
   selector:
-    app: docker-registry
+    app: docker-images-registry
   type: NodePort
