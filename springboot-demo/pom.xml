@@ -42,17 +42,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.1.4</version>
-                <configuration>
-                    <to>
-                        <image>localhost/registry/springboot:v1</image>
-                    </to>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
