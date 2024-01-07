@@ -92,6 +92,7 @@ spec:
       port: 5000
       protocol: TCP
       targetPort: 5000
+#      nodePort: 5000 # docker-desktop 没办法
   selector:
     app: docker-images-registry
   type: LoadBalancer
