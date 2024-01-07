@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: springboot-demo
-          image: localhost:5000/springboot-demo:0.0.1-SNAPSHOT  # 替换为你的镜像名称和标签
+          image: localhost:5000/springboot-demo:latest  # 替换为你的镜像名称和标签
           ports:
             - containerPort: 8080
 ---
