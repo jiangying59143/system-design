@@ -15,6 +15,7 @@
     <description>springboot-demo</description>
     <properties>
         <java.version>21</java.version>
+        <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -34,13 +35,58 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
+                <!--<executions>
                     <execution>
                         <goals>
                             <goal>build-image-no-fork</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:21-jre-jammy</image>
+                        <platforms>
+                            <platform>
+                                <architecture>amd64</architecture>
+                                <os>linux</os>
+                            </platform>
+                        </platforms>
+                    </from>
+                    <to>
+                        <image>springboot-demo:latest</image>
+                    </to>
+                    <container>
+                        <entrypoint>
+                            <shell>bash</shell>
+                            <option>-c</option>
+                            <arg>/entrypoint.sh</arg>
+                        </entrypoint>
+                        <ports>
+                            <port>8080</port>
+                        </ports>
+                        <environment>
+                            <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+                            <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
+                        </environment>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                        <user>1000</user>
+                    </container>
+                    <extraDirectories>
+                        <paths>src/main/docker/jib</paths>
+                        <permissions>
+                            <permission>
+                                <file>/entrypoint.sh</file>
+                                <mode>755</mode>
+                            </permission>
+                        </permissions>
+                    </extraDirectories>
+                </configuration>
             </plugin>
         </plugins>
     </build>
