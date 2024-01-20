@@ -1,0 +1,30 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-storage-claim-test
+  namespace: dev
+spec:
+  storageClassName: nfs-storage
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 64Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-storage-class-test
+  namespace: dev
+spec:
+  containers:
+    - name: busybox
+      image: busybox:1.30
+      command: ["/bin/sh","-c","while true;do echo -n 'pod-storage-class-test ' >> /root/out.txt && date >> /root/out.txt; sleep 3; done;"]
+      volumeMounts:
+        - name: volume
+          mountPath: /root/
+  volumes:
+    - name: volume
+      persistentVolumeClaim:
+        claimName: nfs-storage-claim-test

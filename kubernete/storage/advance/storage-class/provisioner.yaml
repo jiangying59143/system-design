@@ -1,0 +1,41 @@
+#  创建PV的Provisioner（存储插件）
+#
+#  创建PV存储插件，这样才能实现自动创建PV，一是在NFS共享目录下创建挂载点（volume），二是建立PV并将PC与NFS挂载建立关联
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-client-provisioner
+  labels:
+    app: nfs-client-provisioner
+  namespace: dev
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner
+          image: gmoney23/nfs-client-provisioner:latest
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: fuseim.pri/ifs
+            - name: NFS_SERVER
+              value: 192.168.154.103
+            - name: NFS_PATH
+              value: /root/data/nfs/storageClass
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: 192.168.154.103
+            path: /root/data/nfs/storageClass

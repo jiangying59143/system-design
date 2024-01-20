@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: example-statefulset
+  namespace: dev
+spec:
+  serviceName: "example-statefulset"  # Headless Service 的名称
+  replicas: 3  # 副本数量
+  selector:
+    matchLabels:
+      app: example-app  # Pod 模板的标签选择器
+  template:
+    metadata:
+      labels:
+        app: example-app  # Pod 模板的标签
+    spec:
+      containers:
+        - name: example-container  # 容器名称
+          image: nginx  # 容器镜像
+          ports:
+            - containerPort: 80  # 容器端口
+  volumeClaimTemplates:  # PVC 模板
+    - metadata:
+        name: data  # PVC 名称
+      spec:
+        accessModes: [ "ReadWriteOnce" ]  # 存储卷访问模式
+        resources:
+          requests:
+            storage: 1Gi  # 存储量
