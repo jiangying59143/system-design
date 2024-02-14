@@ -11,9 +11,9 @@
 
 前置配置
 
-`kubectl create -f class.yaml,rbac.yaml,provisioner.yaml`
+`kubectl create -f namespace.yaml,class.yaml,rbac.yaml,provisioner.yaml`
 
-`kubectl create -f claim-pod.yaml`
+`kubectl create -f pvc.yaml,claim-pod.yaml`
 
 `kubectl get sc,pvc,pods -n dev -o wide`
 

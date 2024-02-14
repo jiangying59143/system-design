@@ -48,7 +48,7 @@ delete services and ingress
 
 `kubectl get ingressClass`
 
-在[ingress-example.yaml](ingress-example.yaml)中添加ingressClassName: nginx
+在[ingress-example.yaml](ingress/ingress-example.yaml)中添加ingressClassName: nginx
 
 `kubectl apply -f ingress-example.yaml`
 
