@@ -7,3 +7,4 @@
 /docker/mysql/tmp/
 /docker/canal/mysql/
 /docker/TmpData/
+/cdn-test/.mvn/wrapper/
