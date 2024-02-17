@@ -9,7 +9,9 @@ services:
     volumes:
       - ./dns-server/config/dnsmasq.conf:/etc/dnsmasq.conf:ro
       - ./dns-server/config/example.com.conf:/etc/dnsmasq.d/example.com.conf:ro
-    command: [ "dnsmasq", "-k", "--server", "1.1.1.1", "--server", "1.0.0.1" ]
+      - ./dns-server/config/dnsmasq-user.conf:/usr/dnsmasq/dnsmasq-user.conf
+      - ./dns-server/logs:/usr/dnsmasq/logs
+    command: [ "dnsmasq", "-k", "--server", "223.5.5.5" ]
     ports:
       - "153:53"
     deploy:
@@ -67,6 +69,21 @@ services:
     depends_on:
       - dnsmasq
 
+  testNginx:
+    image: nginx:latest
+    container_name: testNginx
+    hostname: testNginx
+    ports:
+      - '8081:80'
+    volumes:
+      - ./testNginx/logs:/var/log/nginx
+    networks:
+      cdn-network:
+        ipv4_address: 172.16.238.13
+    dns: 172.16.238.10
+    depends_on:
+      - dnsmasq
+
   cdndnsserver:
     build:
       context: ./../
@@ -76,7 +93,7 @@ services:
     container_name: cdndnsserver
     hostname: cdndnsserver
     ports:
-      - '1053:1053'
+      - '1053:53'
     networks:
       cdn-network:
         ipv4_address: 172.16.238.20
