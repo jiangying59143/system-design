@@ -7,6 +7,8 @@ forward . 10.233.0.3 {
     force_tcp
 }
 ````
+地址来自 coredns service
+![core-dns.png](core-dns.png)
 
 line 19 [configMap.yaml](configMap.yaml)
 ````
@@ -15,6 +17,8 @@ hosts {
     fallthrough
 }
 ````
+地址来在nginx controller service
+![nginx-controller.png](nginx-controller.png)
 
 ````
 kubectl delete cm nodelocaldns coredns -n kube-system
