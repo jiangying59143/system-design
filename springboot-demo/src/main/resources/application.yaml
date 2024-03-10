@@ -1,1 +1,11 @@
+server:
+  port: 8080
 
+
+spring:
+  application:
+    # 应用名称
+    name: springboot-demo
+
+log:
+  logstash-host: localhost:50000
