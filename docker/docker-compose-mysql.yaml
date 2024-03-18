@@ -1,97 +1,96 @@
 version: '3'
 services:
-  master1:
-    image: mysql:5.7
-    container_name: master1
-    hostname: master1
+  master:
+    image: core.harbor.domain/system-design/mysql-master:5.7
+    container_name: master
+    hostname: master
+    build:
+      context: ./..
+      dockerfile: docker/mysql/master/dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_SERVER_ID: 1
       TZ: Asia/Shanghai
-    entrypoint: /root/start.sh
     volumes:
-      - ./TmpData/mysql/master1/data:/var/lib/mysql
-      - ./TmpData/mysql/master1/log:/var/log/mysql
-      - ./mysql/master1-conf/:/etc/mysql/conf.d/source
-      - ./mysql/custom-entry/start.sh:/root/start.sh
-      - ./mysql/master1-init/:/docker-entrypoint-initdb.d/
+      - ./TmpData/mysql/master/data:/var/lib/mysql
+      - ./TmpData/mysql/master/log:/var/log/mysql
+      - ./mysql/master1-conf/:/etc/mysql/conf.d
     networks:
       - mysql-network
     ports:
       - "3306:3306"
+    # 添加健康检查
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping","-h", "localhost" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
-  master1-slave1:
+  master-slave1:
     image: mysql:5.7
-    container_name: master1-slave1
-    hostname: master1-slave1
+    container_name: master-slave1
+    hostname: master-slave1
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_SERVER_ID: 2
       TZ: Asia/Shanghai
-    entrypoint: /root/start.sh
     volumes:
-      - ./TmpData/mysql/master1-slave1/data:/var/lib/mysql
-      - ./TmpData/mysql/master1-slave1/log:/var/log/mysql
-      - ./mysql/master1-slave1-conf/:/etc/mysql/conf.d/source
-      - ./mysql/custom-entry/start.sh:/root/start.sh
+      - ./TmpData/mysql/master-slave1/data:/var/lib/mysql
+      - ./TmpData/mysql/master-slave1/log:/var/log/mysql
+      - ./mysql/master1-slave1-conf/:/etc/mysql/conf.d
     networks:
       - mysql-network
     ports:
       - "3307:3306"
     depends_on:
-      - master1
+      - master
 
-  master1-slave2:
+  master-slave2:
     image: mysql:5.7
-    container_name: master1-slave2
-    hostname: master1-slave2
+    container_name: master-slave2
+    hostname: master-slave2
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_SERVER_ID: 3
       TZ: Asia/Shanghai
-    entrypoint: /root/start.sh
     volumes:
-      - ./TmpData/mysql/master1-slave2/data:/var/lib/mysql
-      - ./TmpData/mysql/master1-slave2/log:/var/log/mysql
-      - ./mysql/master1-slave2-conf/:/etc/mysql/conf.d/source
-      - ./mysql/custom-entry/start.sh:/root/start.sh
+      - ./TmpData/mysql/master-slave2/data:/var/lib/mysql
+      - ./TmpData/mysql/master-slave2/log:/var/log/mysql
+      - ./mysql/master1-slave1-conf/:/etc/mysql/conf.d
     networks:
       - mysql-network
     ports:
       - "3308:3306"
     depends_on:
-      - master1
+      - master
 
-  my-config-server:
-    image: config-server:v1.0
-    container_name: my-config-server
-    hostname: my-config-server
-    networks:
-      - mysql-network
-    depends_on:
-      - master1-slave2
-      - master1-slave1
+#  my-config-server:
+#    image: config-server:v1.0
+#    container_name: my-config-server
+#    hostname: my-config-server
+#    networks:
+#      - mysql-network
+#    depends_on:
+#      - master1-slave2
+#      - master1-slave1
 
-  canal-server:
-    image: canal/canal-server:v1.1.5
-    hostname: canal-server
-    container_name: canal-server
-    ports:
-      - 11111:11111
-    volumes:
-      #      - ./canal/conf:/home/admin/canal-server/conf
-      - ./TmpData/mysql/canal/canal-server-logs/:/home/admin/canal-server/logs/
-    privileged: true
-    environment:
-      - canal.instance.mysql.slaveId=4   # slaveId 不与其他重复即可
-      - canal.auto.scan=false                # 自动扫描
-      - canal.destinations=test         #  client 需要指定此 dest
-      - canal.instance.master.address=master1:3306   # mysql 地址
-      - canal.instance.dbUsername=canal               # mysql username
-      - canal.instance.dbPassword=canal       # mysql 密码
-      - canal.instance.connectionCharset=UTF-8
-      - canal.instance.filter.regex=db0.t_user,db1.t_user
-      - canal.mq.topic=db01
+#  canal-server:
+#    image: canal/canal-server:v1.1.5
+#    hostname: canal-server
+#    container_name: canal-server
+#    ports:
+#      - 11111:11111
+#    volumes:
+#      #      - ./canal/conf:/home/admin/canal-server/conf
+#      - ./TmpData/mysql/canal/canal-server-logs/:/home/admin/canal-server/logs/
+#    privileged: true
+#    environment:
+#      - canal.instance.mysql.slaveId=4   # slaveId 不与其他重复即可
+#      - canal.auto.scan=false                # 自动扫描
+#      - canal.destinations=test         #  client 需要指定此 dest
+#      - canal.instance.master.address=master1:3306   # mysql 地址
+#      - canal.instance.dbUsername=canal               # mysql username
+#      - canal.instance.dbPassword=canal       # mysql 密码
+#      - canal.instance.connectionCharset=UTF-8
+#      - canal.instance.filter.regex=db0.t_user,db1.t_user
+#      - canal.mq.topic=db01
     #      - canal.serverMode=rabbitMQ
     #      - rabbitmq.host=rabbit1
     #      - rabbitmq.virtual.host=/
@@ -99,16 +98,16 @@ services:
     #      - rabbitmq.username=guest
     #      - rabbitmq.password=guest
     #      - rabbitmq.deliveryMode=fanout
-    depends_on:
-      - master1-slave1
-      - master1-slave2
-      - rabbit2
-      - rabbit3
-    links:
-      - master1
-      - rabbit1
-    networks:
-      - mysql-network
+#    depends_on:
+#      - master1-slave1
+#      - master1-slave2
+#      - rabbit2
+#      - rabbit3
+#    links:
+#      - master1
+#      - rabbit1
+#    networks:
+#      - mysql-network
 
 networks:
   mysql-network:
