@@ -1,32 +1,33 @@
 version: '3'
 services:
   master:
-    image: core.harbor.domain/system-design/mysql-master:5.7
+    image: core.harbor.domain/system-design/mysql:v5.7.16
     container_name: master
     hostname: master
     build:
       context: ./..
-      dockerfile: docker/mysql/master/dockerfile
+      dockerfile: docker/mysql/dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: root
-      TZ: Asia/Shanghai
+#      TZ: Asia/Shanghai
     volumes:
       - ./TmpData/mysql/master/data:/var/lib/mysql
       - ./TmpData/mysql/master/log:/var/log/mysql
-      - ./mysql/master1-conf/:/etc/mysql/conf.d
+      - ./mysql/master/conf:/etc/mysql/conf.d/source
+      - ./mysql/master/init:/docker-entrypoint-initdb.d/
     networks:
       - mysql-network
     ports:
       - "3306:3306"
     # 添加健康检查
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping","-h", "localhost" ]
+      test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
       interval: 10s
       timeout: 10s
-      retries: 10
+      retries: 2
 
   master-slave1:
-    image: mysql:5.7
+    image: mysql:5.7.15
     container_name: master-slave1
     hostname: master-slave1
     environment:
