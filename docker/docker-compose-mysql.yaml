@@ -1,20 +1,15 @@
 version: '3'
 services:
   master:
-    image: core.harbor.domain/system-design/mysql:v5.7.16
-    container_name: master
-    hostname: master
-    build:
-      context: ./..
-      dockerfile: docker/mysql/dockerfile
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
-#      TZ: Asia/Shanghai
+      TZ: Asia/Shanghai
     volumes:
+      - ./mysql/master/conf:/etc/mysql/conf.d/
+#      - ./mysql/master/init:/docker-entrypoint-initdb.d/
       - ./TmpData/mysql/master/data:/var/lib/mysql
       - ./TmpData/mysql/master/log:/var/log/mysql
-      - ./mysql/master/conf:/etc/mysql/conf.d/source
-      - ./mysql/master/init:/docker-entrypoint-initdb.d/
     networks:
       - mysql-network
     ports:
@@ -26,89 +21,67 @@ services:
       timeout: 10s
       retries: 2
 
-  master-slave1:
-    image: mysql:5.7.15
-    container_name: master-slave1
-    hostname: master-slave1
+  slave0:
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - ./TmpData/mysql/master-slave1/data:/var/lib/mysql
-      - ./TmpData/mysql/master-slave1/log:/var/log/mysql
-      - ./mysql/master1-slave1-conf/:/etc/mysql/conf.d
+      - ./mysql/slave0/conf:/etc/mysql/conf.d
+      - ./TmpData/mysql/slave0/data:/var/lib/mysql
+      - ./TmpData/mysql/slave0/log:/var/log/mysql
     networks:
       - mysql-network
     ports:
       - "3307:3306"
+    # 添加健康检查
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
+      interval: 10s
+      timeout: 10s
+      retries: 2
     depends_on:
-      - master
+      master:
+        condition: service_healthy
 
-  master-slave2:
+  slave1:
     image: mysql:5.7
-    container_name: master-slave2
-    hostname: master-slave2
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - ./TmpData/mysql/master-slave2/data:/var/lib/mysql
-      - ./TmpData/mysql/master-slave2/log:/var/log/mysql
-      - ./mysql/master1-slave1-conf/:/etc/mysql/conf.d
+      - ./mysql/slave1/conf:/etc/mysql/conf.d
+      - ./TmpData/mysql/slave1/data:/var/lib/mysql
+      - ./TmpData/mysql/slave1/log:/var/log/mysql
     networks:
       - mysql-network
     ports:
       - "3308:3306"
+    # 添加健康检查
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
+      interval: 10s
+      timeout: 10s
+      retries: 2
     depends_on:
-      - master
+      master:
+        condition: service_healthy
 
-#  my-config-server:
-#    image: config-server:v1.0
-#    container_name: my-config-server
-#    hostname: my-config-server
-#    networks:
-#      - mysql-network
-#    depends_on:
-#      - master1-slave2
-#      - master1-slave1
-
-#  canal-server:
-#    image: canal/canal-server:v1.1.5
-#    hostname: canal-server
-#    container_name: canal-server
-#    ports:
-#      - 11111:11111
-#    volumes:
-#      #      - ./canal/conf:/home/admin/canal-server/conf
-#      - ./TmpData/mysql/canal/canal-server-logs/:/home/admin/canal-server/logs/
-#    privileged: true
-#    environment:
-#      - canal.instance.mysql.slaveId=4   # slaveId 不与其他重复即可
-#      - canal.auto.scan=false                # 自动扫描
-#      - canal.destinations=test         #  client 需要指定此 dest
-#      - canal.instance.master.address=master1:3306   # mysql 地址
-#      - canal.instance.dbUsername=canal               # mysql username
-#      - canal.instance.dbPassword=canal       # mysql 密码
-#      - canal.instance.connectionCharset=UTF-8
-#      - canal.instance.filter.regex=db0.t_user,db1.t_user
-#      - canal.mq.topic=db01
-    #      - canal.serverMode=rabbitMQ
-    #      - rabbitmq.host=rabbit1
-    #      - rabbitmq.virtual.host=/
-    #      - rabbitmq.exchange=mysql.exchange
-    #      - rabbitmq.username=guest
-    #      - rabbitmq.password=guest
-    #      - rabbitmq.deliveryMode=fanout
-#    depends_on:
-#      - master1-slave1
-#      - master1-slave2
-#      - rabbit2
-#      - rabbit3
-#    links:
-#      - master1
-#      - rabbit1
-#    networks:
-#      - mysql-network
+  my-config-server:
+    image: mysql:5.7
+    volumes:
+      - ./mysql/config-server/config-master-slave:/root/
+      - ./TmpData/mysql/config-server/data:/var/lib/mysql
+      - ./TmpData/mysql/config-server/log:/var/log/mysql
+    networks:
+      - mysql-network
+    entrypoint: ["/root/set-sysn-and-create-db-table.sh","/bin/bash"]
+    depends_on:
+      slave0:
+        condition: service_healthy
+      slave1:
+        condition: service_healthy
 
 networks:
   mysql-network:
+    driver: bridge

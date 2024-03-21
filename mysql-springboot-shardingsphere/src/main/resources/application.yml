@@ -1,0 +1,110 @@
+# application.yml
+server:
+  port: 9001
+# two groups, each has one master and two slaves
+spring:
+  shardingsphere:
+    datasource:
+      names: master0, slave00, slave01, master1, slave10, slave11
+      master0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/db0?useSSL=false
+        username: root
+        password: root
+      slave00:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3307/db0?useSSL=false
+        username: root
+        password: root
+      slave01:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3308/db0?useSSL=false
+        username: root
+        password: root
+      master1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/db1?useSSL=false
+        username: root
+        password: root
+      slave10:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3307/db1?useSSL=false
+        username: root
+        password: root
+      slave11:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3308/db1?useSSL=false
+        username: root
+        password: root
+    sharding:
+      default-database-strategy:
+        inline:
+          sharding-column: id
+          algorithm-expression: ds$->{id % 2}
+      tables:
+        t_user:
+          # ms_ds 对应主从中配置
+          actualDataNodes: ds${0..1}.t_user
+          databaseStrategy:
+            inline:
+              shardingColumn: id
+              algorithmExpression: ds${id % 2}
+          keyGenerator:
+            type: SNOWFLAKE
+            column: id
+        t_order:
+          actualDataNodes: ds${0..1}.t_order${0..1}
+          # 分库策略
+          databaseStrategy:
+            inline:
+              shardingColumn: user_id
+              algorithmExpression: ds${user_id % 2}
+          # 分表策略
+          tableStrategy:
+            inline:
+              shardingColumn: id
+              algorithmExpression: t_order${id % 2}
+          keyGenerator:
+            type: SNOWFLAKE
+            column: id
+        t_order_item:
+          actualDataNodes: ds${0..1}.t_order_item${0..1}
+          databaseStrategy:
+            inline:
+              shardingColumn: user_id
+              algorithmExpression: ds${user_id % 2}
+          tableStrategy:
+            inline:
+              shardingColumn: order_id
+              algorithmExpression: t_order_item${order_id % 2}
+        # 不会跨库查询
+        bindingTables:
+          - t_user,t_order,t_order_item
+  #      broadcastTables:
+  #        - t_config
+      default-data-source-name: master0
+      master-slave-rules:
+        ds0:
+          master-data-source-name: master0
+          slave-data-source-names: slave00, slave01
+#          load-balance-algorithm-type: random
+          load-balance-algorithm-type: ROUND_ROBIN
+        ds1:
+          master-data-source-name: master1
+          slave-data-source-names: slave10, slave11
+#          load-balance-algorithm-type: random
+          load-balance-algorithm-type: ROUND_ROBIN
+
+    props:
+      sql:
+        show: true
+
+
+
+# 其他ShardingSphere配置
