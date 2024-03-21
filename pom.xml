@@ -52,6 +52,7 @@
         <module>uniquekey</module>
         <module>nginx</module>
         <module>springboot-demo</module>
+        <module>cdn-test</module>
     </modules>
 
     <dependencyManagement>

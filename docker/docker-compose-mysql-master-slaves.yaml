@@ -1,7 +1,7 @@
 version: '3'
 services:
   master:
-    image: mysql:5.7
+    image: mysql:5.7.16
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
@@ -14,6 +14,9 @@ services:
       - mysql-network
     ports:
       - "3306:3306"
+    entrypoint: >
+      /bin/sh -c "chmod 0444 /etc/mysql/conf.d/my.cnf
+      && docker-entrypoint.sh mysqld"
     # 添加健康检查
     healthcheck:
       test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
@@ -22,7 +25,7 @@ services:
       retries: 2
 
   slave0:
-    image: mysql:5.7
+    image: mysql:5.7.16
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
@@ -32,6 +35,9 @@ services:
       - ./TmpData/mysql/slave0/log:/var/log/mysql
     networks:
       - mysql-network
+    entrypoint: >
+      /bin/sh -c "chmod 0444 /etc/mysql/conf.d/my.cnf
+      && docker-entrypoint.sh mysqld"
     ports:
       - "3307:3306"
     # 添加健康检查
@@ -45,7 +51,7 @@ services:
         condition: service_healthy
 
   slave1:
-    image: mysql:5.7
+    image: mysql:5.7.16
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
@@ -57,6 +63,9 @@ services:
       - mysql-network
     ports:
       - "3308:3306"
+    entrypoint: >
+      /bin/sh -c "chmod 0444 /etc/mysql/conf.d/my.cnf
+      && docker-entrypoint.sh mysqld"
     # 添加健康检查
     healthcheck:
       test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
@@ -68,14 +77,16 @@ services:
         condition: service_healthy
 
   my-config-server:
-    image: mysql:5.7
+    image: mysql:5.7.16
     volumes:
       - ./mysql/config-server/config-master-slave:/root/
       - ./TmpData/mysql/config-server/data:/var/lib/mysql
       - ./TmpData/mysql/config-server/log:/var/log/mysql
     networks:
       - mysql-network
-    entrypoint: ["/root/set-sysn-and-create-db-table.sh","/bin/bash"]
+    entrypoint: >
+      /bin/sh -c "/root/set-sysn-and-create-db-table.sh 
+      && tail -f /root/slave0.cnf"
     depends_on:
       slave0:
         condition: service_healthy

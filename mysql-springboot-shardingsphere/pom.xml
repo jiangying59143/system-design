@@ -10,8 +10,8 @@
     <groupId>com.example</groupId>
     <artifactId>mysql-springboot-shardingsphere</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mysql</name>
-    <description>mysql</description>
+    <name>mysql-springboot-shardingsphere</name>
+    <description>mysql-springboot-shardingsphere</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

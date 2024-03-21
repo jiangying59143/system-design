@@ -2,7 +2,7 @@
 echo -e "---------------- set-sysn-and-create-db-table.sh start ----------- "
 echo "# 配置文件"
 ls /root
-chmod 600 /root/master.cnf /root/slave0.cnf /root/slave1.cnf
+chmod 0444 /root/master.cnf /root/slave0.cnf /root/slave1.cnf
 echo -e "\n# 设置用户"
 mysql --defaults-extra-file=/root/master.cnf <<EOF
 DROP USER IF EXISTS 'slave'@'%';

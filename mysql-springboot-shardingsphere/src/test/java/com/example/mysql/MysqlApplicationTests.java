@@ -9,9 +9,6 @@ import org.springframework.context.annotation.DependsOn;
 
 @SpringBootTest
 class MysqlApplicationTests {
-
-
-
     @Autowired
     UserRepo userRepo;
 
