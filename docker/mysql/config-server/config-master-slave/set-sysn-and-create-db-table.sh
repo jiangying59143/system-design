@@ -1,8 +1,26 @@
 #!/bin/bash
+
+#set -x
+
+while ! mysqladmin --defaults-extra-file=/root/master.cnf ping -h master --silent; do
+echo "master 未就绪，等待中..."
+    sleep 1
+done
+
+while ! mysqladmin --defaults-extra-file=/root/slave0.cnf ping -h slave0 --silent; do
+    echo "slave0 未就绪，等待中..."
+    sleep 2
+done
+
+while ! mysqladmin --defaults-extra-file=/root/slave1.cnf ping -h slave1 --silent; do
+    echo "slave1 未就绪，等待中..."
+    sleep 2
+done
+
 echo -e "---------------- set-sysn-and-create-db-table.sh start ----------- "
 echo "# 配置文件"
 ls /root
-chmod 0444 /root/master.cnf /root/slave0.cnf /root/slave1.cnf
+#chmod 0444 /root/master.cnf /root/slave0.cnf /root/slave1.cnf
 echo -e "\n# 设置用户"
 mysql --defaults-extra-file=/root/master.cnf <<EOF
 DROP USER IF EXISTS 'slave'@'%';

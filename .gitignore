@@ -3,8 +3,8 @@
 /*/*.iml
 /*/target
 /system-design.iml
-/docker/canal/canal-server-logs/
+/docker/mysql-canal/canal-server-logs/
 /docker/mysql/tmp/
-/docker/canal/mysql/
+/docker/mysql-canal/mysql/
 /docker/TmpData/
 /cdn-test/.mvn/wrapper/

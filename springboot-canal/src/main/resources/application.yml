@@ -5,6 +5,6 @@ canal:
   server:
     hostname: localhost
     port: 11111
-    destination: test
+    destination: canal_test
     username: canal
     password: canal

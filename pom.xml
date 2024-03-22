@@ -44,7 +44,7 @@
 
     <modules>
         <module>mysql-springboot-shardingsphere</module>
-        <module>canal</module>
+        <module>springboot-canal</module>
         <module>mq</module>
         <module>mq_consumer</module>
         <module>algorithm</module>

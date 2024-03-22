@@ -6,12 +6,10 @@ services:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - ./mysql/master/conf:/etc/mysql/conf.d/
-#      - ./mysql/master/init:/docker-entrypoint-initdb.d/
-      - ./TmpData/mysql/master/data:/var/lib/mysql
-      - ./TmpData/mysql/master/log:/var/log/mysql
-    networks:
-      - mysql-network
+      - ./master/conf:/etc/mysql/conf.d/
+#      - ./master/init:/docker-entrypoint-initdb.d/
+      - ./TempData/master/data:/var/lib/mysql
+      - ./TempData/master/log:/var/log/mysql
     ports:
       - "3306:3306"
     entrypoint: >
@@ -30,11 +28,9 @@ services:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - ./mysql/slave0/conf:/etc/mysql/conf.d
-      - ./TmpData/mysql/slave0/data:/var/lib/mysql
-      - ./TmpData/mysql/slave0/log:/var/log/mysql
-    networks:
-      - mysql-network
+      - ./slave0/conf:/etc/mysql/conf.d
+      - ./TempData/slave0/data:/var/lib/mysql
+      - ./TempData/slave0/log:/var/log/mysql
     entrypoint: >
       /bin/sh -c "chmod 0444 /etc/mysql/conf.d/my.cnf
       && docker-entrypoint.sh mysqld"
@@ -56,11 +52,9 @@ services:
       MYSQL_ROOT_PASSWORD: root
       TZ: Asia/Shanghai
     volumes:
-      - ./mysql/slave1/conf:/etc/mysql/conf.d
-      - ./TmpData/mysql/slave1/data:/var/lib/mysql
-      - ./TmpData/mysql/slave1/log:/var/log/mysql
-    networks:
-      - mysql-network
+      - ./slave1/conf:/etc/mysql/conf.d
+      - ./TempData/slave1/data:/var/lib/mysql
+      - ./TempData/slave1/log:/var/log/mysql
     ports:
       - "3308:3306"
     entrypoint: >
@@ -79,20 +73,15 @@ services:
   my-config-server:
     image: mysql:5.7.16
     volumes:
-      - ./mysql/config-server/config-master-slave:/root/
-      - ./TmpData/mysql/config-server/data:/var/lib/mysql
-      - ./TmpData/mysql/config-server/log:/var/log/mysql
-    networks:
-      - mysql-network
+      - ./config-server/config-master-slave:/root/
+      - ./TempData/config-server/data:/var/lib/mysql
+      - ./TempData/config-server/log:/var/log/mysql
     entrypoint: >
-      /bin/sh -c "/root/set-sysn-and-create-db-table.sh 
-      && tail -f /root/slave0.cnf"
+      /bin/sh -c "/root/set-sysn-and-create-db-table.sh
+      "
+#      --&& tail -f /root/slave0.cnf
     depends_on:
       slave0:
         condition: service_healthy
       slave1:
         condition: service_healthy
-
-networks:
-  mysql-network:
-    driver: bridge

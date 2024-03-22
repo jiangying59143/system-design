@@ -1,0 +1,57 @@
+version: "3.8"
+services:
+  nacos-mysql:
+    container_name: mysql
+    image: mysql:5.7.16
+    env_file:
+      - mysql/env/mysql.env
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d/
+      - ./mysql/sql:/docker-entrypoint-initdb.d/
+      - ./TmpData/nacos-mysql/data:/var/lib/mysql
+      - ./TmpData/nacos-mysql/log:/var/log/mysql
+    ports:
+      - "3306:3306"
+    entrypoint: >
+      /bin/sh -c "chmod 0444 /etc/mysql/conf.d/my.cnf
+      && docker-entrypoint.sh mysqld"
+    # 添加健康检查
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  nacos:
+    image: nacos/nacos-server:v2.3.1
+    container_name: nacos-standalone-mysql
+    env_file:
+      - nacos/env/nacos-standlone-mysql.env
+    volumes:
+      - ./TmpData/nacos/standalone-logs/:/home/nacos/logs
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    depends_on:
+      nacos-mysql:
+        condition: service_healthy
+
+    restart: on-failure
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus-standalone.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - nacos
+    restart: on-failure
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    restart: on-failure
+
