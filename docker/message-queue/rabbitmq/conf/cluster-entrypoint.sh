@@ -3,7 +3,7 @@
 set -e
 
 # Change .erlang.cookie permission
-chmod 400 /var/lib/rabbitmq/.erlang.cookie
+chmod 400 /var/lib/rabbitmq/mnesia/.erlang.cookie
 
 # Get hostname from enviromant variable
 HOSTNAME=`env hostname`
@@ -18,8 +18,8 @@ else
     sleep 5
     rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
     rabbitmqctl stop_app
-    rabbitmqctl join_cluster rabbit@$JOIN_CLUSTER_HOST
-    rabbitmqctl start_app
+#    rabbitmqctl join_cluster rabbit@$JOIN_CLUSTER_HOST
+#    rabbitmqctl start_app
 fi
 
 # Keep foreground process active ...

@@ -84,28 +84,19 @@ public class ProducerTest {
         rabbitTemplate.setMandatory(true);
 
         //2.设置ReturnCallBack
-        rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
-            /**
-             *
-             * @param message   消息对象
-             * @param replyCode 错误码
-             * @param replyText 错误信息
-             * @param exchange  交换机
-             * @param routingKey 路由键
-             */
-            @Override
-            public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+        rabbitTemplate.setReturnsCallback(message ->
+            {
                 System.out.println("return 执行了....");
 
-                System.out.println(message);
-                System.out.println(replyCode);
-                System.out.println(replyText);
-                System.out.println(exchange);
-                System.out.println(routingKey);
+                System.out.println(message.getMessage());
+                System.out.println(message.getReplyCode());
+                System.out.println(message.getReplyText());
+                System.out.println(message.getExchange());
+                System.out.println(message.getRoutingKey());
 
                 //处理
             }
-        });
+        );
 
 
         //3. 发送消息

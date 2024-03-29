@@ -13,3 +13,9 @@
       /bin/sh -c "chmod 0444 /etc/mysql/conf.d/my.cnf
       && docker-entrypoint.sh mysqld"
    ````
+   
+### idea wsl docker rabbitmq
+
+1. file.sh not find
+
+需要设置文件格式为 LF

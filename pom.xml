@@ -45,8 +45,7 @@
     <modules>
         <module>mysql-springboot-shardingsphere</module>
         <module>springboot-canal</module>
-        <module>mq</module>
-        <module>mq_consumer</module>
+        <module>message-queue</module>
         <module>algorithm</module>
         <module>server</module>
         <module>uniquekey</module>

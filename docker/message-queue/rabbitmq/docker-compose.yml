@@ -8,7 +8,7 @@ services:
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
     volumes:
-      - ./conf/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./conf/.erlang.cookie:/var/lib/rabbitmq/mnesia/.erlang.cookie
       - ./conf/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
 
@@ -20,9 +20,10 @@ services:
     environment:
       - JOIN_CLUSTER_HOST=rabbitmq1
     volumes:
-      - ./conf/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./conf/.erlang.cookie:/var/lib/rabbitmq/mnesia/.erlang.cookie
       - ./conf/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
-    entrypoint: /usr/local/bin/cluster-entrypoint.sh
+    entrypoint: /bin/bash -c "tail -f /dev/null"
+#    /usr/local/bin/cluster-entrypoint.sh
 
   rabbitmq3:
     image: rabbitmq:3-management
@@ -32,7 +33,7 @@ services:
     environment:
       - JOIN_CLUSTER_HOST=rabbitmq1
     volumes:
-      - ./conf/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+      - ./conf/.erlang.cookie:/var/lib/rabbitmq/mnesia/.erlang.cookie
       - ./conf/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
 
