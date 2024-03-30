@@ -1,3 +1,5 @@
+reference: https://github.com/serkodev/rabbitmq-cluster-docker
+
 # RabbitMQ Cluster Docker
 
 Setup a RabbitMQ Cluster environment on your device using the pure [RabbitMQ](https://hub.docker.com/_/rabbitmq/) official docker image with Docker Compose.
