@@ -1,4 +1,4 @@
-package org.example.mq;
+package org.example.mq.exchange;
 
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;

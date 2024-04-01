@@ -1,4 +1,4 @@
-package org.example.mq_consumer;
+package org.example.mq_consumer.exchange;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

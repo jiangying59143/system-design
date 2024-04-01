@@ -1,11 +1,11 @@
-package org.example.mq;
+package org.example.mq_consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MqApplication {
+public class RabbitMqConsumerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MqApplication.class, args);
+        SpringApplication.run(RabbitMqConsumerApplication.class, args);
     }
 }

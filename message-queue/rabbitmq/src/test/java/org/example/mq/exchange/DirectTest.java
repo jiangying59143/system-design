@@ -1,5 +1,6 @@
-package org.example.mq;
+package org.example.mq.exchange;
 
+import org.example.mq.exchange.DirectConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
