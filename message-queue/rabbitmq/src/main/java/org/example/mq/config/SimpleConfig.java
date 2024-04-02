@@ -1,4 +1,4 @@
-package org.example.mq;
+package org.example.mq.config;
 
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.ExchangeBuilder;
@@ -15,4 +15,6 @@ public class SimpleConfig {
     public Queue simpleQueue(){
         return QueueBuilder.durable(QUEUE_NAME).build();
     }
+
+
 }

@@ -1,3 +1,4 @@
+
 server:
   port: 9003
 spring:
@@ -7,3 +8,18 @@ spring:
     username: guest
     password: guest
     virtual-host: /
+    # 开启(连接失败重试 和 超时)
+    connection-timeout: 1s # 设置MQ超时时间
+    template:
+      retry:
+        enabled: true # 开启MQ 超时重试机制
+        initial-interval: 1000ms # 失败后的初始等待时间
+        multiplier: 1  # initial-interval * multiplier
+        max-attempts: 3
+    # 开启确认机制
+#    publisher-confirm-type: correlated # none: 默认不开启 # simple 阻塞等待 # correlated 有相互关系，回调
+#    publisher-returns: true # 测试用途， 一般是程序员导致
+
+logging:
+  charset:
+    console: UTF-8

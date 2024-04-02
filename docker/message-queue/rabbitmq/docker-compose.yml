@@ -2,6 +2,9 @@ services:
   rabbitmq1:
     image: rabbitmq:3.8-management
     hostname: rabbitmq1
+    volumes:
+      - ./TempData/log/rabbitmq:/var/log/rabbitmq
+      - ./TempData/lib/rabbitmq:/var/lib/rabbitmq/mnesia
     ports:
       - "5672:5672"
       - "15672:15672"
