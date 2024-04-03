@@ -9,7 +9,7 @@ spring:
     virtual-host: /
     listener:
       simple:
-        prefetch: 1
+        prefetch: 1 # 每次只能获取一条消息，处理完成才能获取下一个消息 能者多劳
         acknowledge-mode: auto
         retry:
           enabled: true

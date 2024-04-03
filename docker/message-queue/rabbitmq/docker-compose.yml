@@ -1,14 +1,33 @@
 services:
-  rabbitmq1:
-    image: rabbitmq:3.8-management
-    hostname: rabbitmq1
-    volumes:
-      - ./TempData/log/rabbitmq:/var/log/rabbitmq
-      - ./TempData/lib/rabbitmq:/var/lib/rabbitmq/mnesia
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+#  rabbitmq1:
+#    image: rabbitmq:3.8-management
+#    hostname: rabbitmq1
+#    volumes:
+#      - ./TempData/log/rabbitmq:/var/log/rabbitmq
+#      - ./TempData/lib/rabbitmq:/var/lib/rabbitmq/mnesia
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    environment:
+#      RABBITMQ_ERLANG_COOKIE: "uniquecookie"
+#      RABBITMQ_NODENAME: "rabbit@rabbitmq1"
+#      RABBITMQ_CLUSTER_NAME: "rabbit@rabbitmq1"
+  rabbitmq:
+    # hostname is important; otherwise after each container restart data will be lost
+    hostname: 'rabbitmq'
+    image: rabbitmq:3.11.4-management
+    container_name: 'rabbitmq'
     environment:
-      RABBITMQ_ERLANG_COOKIE: "uniquecookie"
-      RABBITMQ_NODENAME: "rabbit@rabbitmq1"
-      RABBITMQ_CLUSTER_NAME: "rabbit@rabbitmq1"
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_PLUGINS_DIR=/opt/rabbitmq/plugins:/usr/lib/rabbitmq/plugins
+    ports:
+      # AMQP protocol port
+      - 5672:5672
+      # HTTP management UI
+      - 15672:15672
+    volumes:
+      - ./temp/data/:/var/lib/rabbitmq/mnesia
+      - ./temp/log/:/var/log/rabbitmq/
+      - ./conf/enabled_plugins:/etc/rabbitmq/enabled_plugins:rw
+      - ./plugins:/usr/lib/rabbitmq/plugins

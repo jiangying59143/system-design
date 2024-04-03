@@ -17,7 +17,6 @@
 
     <modules>
         <module>rabbitmq</module>
-        <module>rabbitmq_consumer</module>
     </modules>
 
 </project>
