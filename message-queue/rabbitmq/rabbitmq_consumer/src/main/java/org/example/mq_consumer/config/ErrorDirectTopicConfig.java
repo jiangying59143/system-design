@@ -43,7 +43,7 @@ public class ErrorDirectTopicConfig {
         3. routing key 相当于 exchange 和 queue之间的 filter
      */
     @Bean
-    public Binding bindtopicQueueExchange1(@Qualifier("topicQueue1") Queue queue, @Qualifier("topicExchange") Exchange exchange){
+    public Binding bindTopicQueueExchange1(@Qualifier("topicQueue1") Queue queue, @Qualifier("topicExchange") Exchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY).noargs();
     }
 

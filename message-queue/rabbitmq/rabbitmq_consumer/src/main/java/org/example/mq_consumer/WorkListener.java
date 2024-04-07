@@ -11,8 +11,10 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 @Component
 public class WorkListener {
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(name = "work_queue", durable = "true"), exchange = @Exchange(value = "work")))
+    @RabbitListener(queuesToDeclare = @Queue(
+            name = "work_queue",
+            durable = "true"
+    ))
     public void listen(Message message) {
         System.out.println("listen1:"+new String(message.getBody()));
     }
