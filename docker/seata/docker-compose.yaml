@@ -1,5 +1,26 @@
 version: "3"
 services:
+  mysql:
+    image: mysql:5.7.16
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d/
+      - ./mysql/init:/docker-entrypoint-initdb.d/
+      - ./temp/mysql/data:/var/lib/mysql
+      - ./temp/mysql/log:/var/log/mysql
+    ports:
+      - "3306:3306"
+    entrypoint: >
+      /bin/sh -c "chmod 0444 /etc/mysql/conf.d/my.cnf
+      && docker-entrypoint.sh mysqld"
+    # 添加健康检查
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
+      interval: 10s
+      timeout: 10s
+      retries: 2
   seata-server:
     image: seataio/seata-server:2.0.0
     hostname: seata-server
