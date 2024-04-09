@@ -42,7 +42,7 @@ seata:
       group: SEATA_GROUP
       namespace: seata-server
       # tc集群名称
-      cluster: SH
+      cluster: HZ
       username: nacos
       password: nacos
   #  server:

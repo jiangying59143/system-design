@@ -155,6 +155,10 @@ exit;"`
 
 `rabbitmqctl set_policy my_ha "^" '{"ha-mode":"all"}' `
 
+### volume
+
+wsl 默认 volume 路径 \\wsl.localhost\Ubuntu\var\lib\docker\volumes
+
 
 
 
