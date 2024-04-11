@@ -52,6 +52,7 @@
         <module>nginx</module>
         <module>springboot-demo</module>
         <module>cdn-test</module>
+        <module>mall-tiny</module>
     </modules>
 
     <dependencyManagement>
