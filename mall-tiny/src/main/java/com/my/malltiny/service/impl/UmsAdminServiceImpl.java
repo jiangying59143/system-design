@@ -2,6 +2,7 @@ package com.my.malltiny.service.impl;
 
 import com.my.malltiny.common.utils.JwtTokenUtil;
 import com.my.malltiny.dao.UmsAdminRoleRelationDao;
+import com.my.malltiny.dto.AdminUserDetails;
 import com.my.malltiny.mbg.mapper.UmsAdminMapper;
 import com.my.malltiny.mbg.model.UmsAdmin;
 import com.my.malltiny.mbg.model.UmsAdminExample;
@@ -16,8 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +31,6 @@ import java.util.List;
 @Service
 public class UmsAdminServiceImpl implements UmsAdminService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UmsAdminServiceImpl.class);
-//    @Autowired
-//    private UserDetailsService userDetailsService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
@@ -76,16 +74,25 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
+    public AdminUserDetails loadUserByUsername(String username){
+        UmsAdmin umsAdmin = this.getAdminByUsername(username);
+        if(umsAdmin == null) throw new UsernameNotFoundException("用户名错误");
+        AdminUserDetails userDetails =  new AdminUserDetails(umsAdmin,this.getPermissionList(umsAdmin.getId()));
+        return userDetails;
+    }
+
+    @Override
     public String login(String username, String password) {
         String token = null;
         try {
-            UmsAdmin umsAdmin = this.getAdminByUsername(username);
-            if (!passwordEncoder.matches(password, umsAdmin.getPassword())) {
+            AdminUserDetails userDetails = this.loadUserByUsername(username);
+            if (!passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("密码不正确");
             }
-//            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-            token = jwtTokenUtil.generateToken(umsAdmin);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            token = jwtTokenUtil.generateToken(userDetails);
         } catch (AuthenticationException e) {
             LOGGER.warn("登录异常:{}", e.getMessage());
         }

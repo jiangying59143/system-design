@@ -1,5 +1,6 @@
 package com.my.malltiny.service;
 
+import com.my.malltiny.dto.AdminUserDetails;
 import com.my.malltiny.mbg.model.UmsAdmin;
 import com.my.malltiny.mbg.model.UmsPermission;
 
@@ -19,6 +20,8 @@ public interface UmsAdminService {
      * 注册功能
      */
     UmsAdmin register(UmsAdmin umsAdminParam);
+
+    AdminUserDetails loadUserByUsername(String username);
 
     /**
      * 登录功能

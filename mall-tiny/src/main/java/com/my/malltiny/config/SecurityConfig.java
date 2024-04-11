@@ -36,8 +36,6 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UmsAdminService adminService;
-    @Autowired
     private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
@@ -89,19 +87,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        //获取登录用户信息
-        return username -> {
-            UmsAdmin admin = adminService.getAdminByUsername(username);
-            if (admin != null) {
-                List<UmsPermission> permissionList = adminService.getPermissionList(admin.getId());
-                return new AdminUserDetails(admin,permissionList);
-            }
-            throw new UsernameNotFoundException("用户名或密码错误");
-        };
     }
 
     @Bean
