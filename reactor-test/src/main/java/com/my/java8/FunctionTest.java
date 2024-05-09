@@ -1,6 +1,7 @@
 package com.my.java8;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.*;
 
@@ -40,5 +41,13 @@ public class FunctionTest {
         Predicate<Integer> predicate = (x)->x%2 == 0;
         System.out.println(predicate.test(1));
         System.out.println(predicate.test(2));
+
+        // custom define
+        MyMultiFunction<Integer, String> myMultiFunction = (x)->Arrays.toString(x);
+        System.out.println(myMultiFunction.apply(1,2,3,4));
+    }
+
+    interface MyMultiFunction<T, R>{
+        R apply(T... t);
     }
 }
