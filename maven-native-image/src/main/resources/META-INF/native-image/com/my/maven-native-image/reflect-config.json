@@ -4,15 +4,11 @@
 },
 {
   "name":"java.awt.event.KeyEvent",
-  "fields":[{"name":"VK_CONTEXT_MENU"}, {"name":"VK_ENTER"}, {"name":"VK_ESCAPE"}, {"name":"VK_F10"}, {"name":"VK_SPACE"}]
+  "fields":[{"name":"VK_CONTEXT_MENU"}, {"name":"VK_F10"}, {"name":"VK_SPACE"}]
 },
 {
   "name":"java.util.concurrent.atomic.AtomicBoolean",
   "fields":[{"name":"value"}]
-},
-{
-  "name":"javax.swing.plaf.basic.BasicOptionPaneUI",
-  "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }, {"name":"loadActionMap","parameterTypes":["javax.swing.plaf.basic.LazyActionMap"] }]
 },
 {
   "name":"javax.swing.plaf.basic.BasicPanelUI",
@@ -23,20 +19,8 @@
   "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
 },
 {
-  "name":"javax.swing.plaf.metal.MetalLabelUI",
-  "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
-},
-{
   "name":"javax.swing.plaf.metal.MetalRootPaneUI",
   "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
-},
-{
-  "name":"sun.awt.Symbol",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.awt.windows.WingDings",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"sun.java2d.marlin.DMarlinRenderingEngine",

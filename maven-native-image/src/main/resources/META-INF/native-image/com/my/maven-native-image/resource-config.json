@@ -17,8 +17,6 @@
   }, {
     "pattern":"java.desktop:\\Qcom/sun/swing/internal/plaf/metal/resources/metal_zh_Hans_CN.properties\\E"
   }, {
-    "pattern":"java.desktop:\\Qjavax/swing/plaf/metal/icons/ocean/info.png\\E"
-  }, {
     "pattern":"java.desktop:\\Qsun/awt/resources/awt_zh.properties\\E"
   }, {
     "pattern":"java.desktop:\\Qsun/awt/resources/awt_zh_Hans.properties\\E"
