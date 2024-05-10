@@ -54,6 +54,7 @@
         <module>cdn-test</module>
         <module>mall-tiny</module>
         <module>reactor-test</module>
+        <module>webflux-test</module>
     </modules>
 
     <dependencyManagement>

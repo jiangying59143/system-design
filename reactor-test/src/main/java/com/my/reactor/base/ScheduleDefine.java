@@ -1,4 +1,4 @@
-package com.my;
+package com.my.reactor.base;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
