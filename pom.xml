@@ -55,6 +55,8 @@
         <module>mall-tiny</module>
         <module>reactor-test</module>
         <module>webflux-test</module>
+        <module>springboot-native-image</module>
+        <module>maven-native-image</module>
     </modules>
 
     <dependencyManagement>
