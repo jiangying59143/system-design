@@ -5,6 +5,7 @@ import org.reactivestreams.Publisher;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
 import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.context.Context;
@@ -13,7 +14,10 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class CommonTest {
     @Test
@@ -314,5 +318,42 @@ public class CommonTest {
                         )))
                 //ThreadLocal共享了数据，上游的所有人能看到; Context由下游传播给上游
                 .subscribe(System.out::println);
+    }
+
+
+
+    @Test
+    public void singleCompleteTest() {
+        // 单线程的情况
+        Flux.range(1, 100)
+                .log()
+                .doOnComplete(()-> System.out.println("doOnComplete"))
+                .doOnTerminate(()-> System.out.println("doOnTerminate"))
+                .subscribe(v-> System.out.println(Thread.currentThread() +" v = " + v));
+    }
+
+    @Test
+    public void parallelCompleteTest() throws IOException {
+
+        // 多线程的情况
+        Flux.range(1, 100)
+                .buffer(10)
+                .parallel(8)
+                .runOn(Schedulers.newParallel("yy", 8))
+                .map(v -> v.stream().reduce((pre,aft)->pre+aft))
+                //每个线程 都会执行下面三个方法
+                .doOnComplete(() -> System.out.println("mutithread doOnComplete"))
+                .doOnTerminate(() -> System.out.println("mutithread doOnTerminate"))
+                .doAfterTerminate(() -> System.out.println("mutithread doAfterTerminate"))
+//                .log()
+                .sequential()
+//                .log()
+                .doOnComplete(() -> System.out.println("sequential doOnComplete"))
+                .reduce((pre,aft)-> Optional.of(pre.get() + aft.get()))
+                .doOnTerminate(() -> System.out.println("sequential doOnTerminate"))
+                .doAfterTerminate(() -> System.out.println("sequential doAfterTerminate"))
+                .subscribe(v -> System.out.println(Thread.currentThread() + " v = " + v));
+
+        System.in.read();
     }
 }
