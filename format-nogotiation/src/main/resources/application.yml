@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: format-nogotiation
+  mvc:
+    contentnegotiation:
+      favor-parameter: true
+      parameter-name: type
+      media-types:
+        yaml: text/yaml
+
+
