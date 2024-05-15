@@ -57,6 +57,8 @@
         <module>webflux-test</module>
         <module>springboot-native-image</module>
         <module>maven-native-image</module>
+        <module>springboot3-webflux-r2dbc</module>
+        <module>spring-security-test</module>
     </modules>
 
     <dependencyManagement>
