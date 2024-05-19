@@ -18,7 +18,7 @@ spring:
           oidc-client:
             provider: spring
             client-id: oidc-client
-            client-secret: $2a$10$.J0Rfg7y2Mu8AN8Dk2vL.eBFa9NGbOYCPOAFEw.QhgGLVXjO7eFDC
+            client-secret: secret
             client-authentication-method: client_secret_basic
             authorization-grant-type: authorization_code
             redirect-uri: http://127.0.0.1:9100/login/oauth2/code/oidc-client
