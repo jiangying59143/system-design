@@ -1,0 +1,16 @@
+version: '3'
+services:
+  master:
+    image: mysql:8.4.0
+    environment:
+      MYSQL_DATABASE: oauth-server
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    # 添加健康检查
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "-uroot", "-proot", "ping","-h", "localhost" ]
+      interval: 10s
+      timeout: 10s
+      retries: 2

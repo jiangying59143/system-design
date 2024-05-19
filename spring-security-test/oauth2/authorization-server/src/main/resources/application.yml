@@ -1,2 +1,11 @@
 server:
   port: 9000
+
+spring:
+  application:
+    name: spring-oauth-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/oauth-server

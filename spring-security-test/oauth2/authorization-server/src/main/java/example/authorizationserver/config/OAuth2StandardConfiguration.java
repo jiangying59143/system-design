@@ -12,9 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *//*
 
-package example.authorizationserver;
+
+package example.authorizationserver.config;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -56,14 +57,16 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
+*/
 /**
  * OAuth Authorization Server Configuration.
  *
  * @author Steve Riesenberg
- */
+ *//*
+
 @Configuration
 @EnableWebSecurity
-public class OAuth2AuthorizationServerSecurityConfiguration {
+public class OAuth2StandardConfiguration {
 
 	@Bean
 	// 应该是最先执行的意思
@@ -175,3 +178,4 @@ public class OAuth2AuthorizationServerSecurityConfiguration {
 	}
 
 }
+*/
