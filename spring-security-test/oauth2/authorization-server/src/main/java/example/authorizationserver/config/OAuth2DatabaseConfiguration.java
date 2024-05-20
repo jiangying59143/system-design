@@ -5,6 +5,8 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import example.authorizationserver.handler.MyAccessDeniedHandler;
+import example.authorizationserver.handler.MyAuthenticationHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -67,7 +69,10 @@ public class OAuth2DatabaseConfiguration {
                 // Accept access tokens for User Info and/or Client Registration
                 // 使用jwt处理接收到的access token
                 .oauth2ResourceServer((resourceServer) -> resourceServer
-                        .jwt(Customizer.withDefaults()));
+                        .jwt(Customizer.withDefaults())
+                        .authenticationEntryPoint(new MyAuthenticationHandler())
+                        .accessDeniedHandler(new MyAccessDeniedHandler())
+                );
 
         return http.build();
     }
