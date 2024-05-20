@@ -65,13 +65,13 @@ public class OAuth2DatabaseConfiguration {
                                 new LoginUrlAuthenticationEntryPoint("/login"),
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
+                        .authenticationEntryPoint(new MyAuthenticationHandler())
+                        .accessDeniedHandler(new MyAccessDeniedHandler())
                 )
                 // Accept access tokens for User Info and/or Client Registration
                 // 使用jwt处理接收到的access token
                 .oauth2ResourceServer((resourceServer) -> resourceServer
                         .jwt(Customizer.withDefaults())
-                        .authenticationEntryPoint(new MyAuthenticationHandler())
-                        .accessDeniedHandler(new MyAccessDeniedHandler())
                 );
 
         return http.build();
@@ -123,6 +123,7 @@ public class OAuth2DatabaseConfiguration {
         return new JdbcOAuth2AuthorizationConsentService(jdbcTemplate, registeredClientRepository);
     }
 
+    // 用户密码加密方式
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

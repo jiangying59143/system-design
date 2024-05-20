@@ -1,0 +1,37 @@
+server:
+  port: 9001
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+#    org.springframework.boot.autoconfigure: DEBUG
+
+spring:
+  thymeleaf:
+    cache: false
+  security:
+    oauth2:
+      client:
+        provider:
+          order-authorization-server:
+            authorization-uri: http://localhost:9000/oauth2/authorize
+            token-uri: http://localhost:9000/oauth2/token
+            jwk-set-uri: http://localhost:9000/oauth2/jwks
+        registration:
+          order-client:
+            provider: order-authorization-server
+            #客户端id，从认证平台申请的客户端id
+            client-id: web-client-id-order
+            client-name: web平台-SSO客户端-订单服务
+            #客户端秘钥
+            client-secret: secret
+            #客户端认证方式
+            client-authentication-method: client_secret_basic
+            #使用授权码模式获取令牌（token）
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:9001/login/oauth2/code/order-client
+            scope:
+              - openid
+              - profile

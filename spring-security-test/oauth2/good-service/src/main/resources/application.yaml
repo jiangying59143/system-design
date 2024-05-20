@@ -1,0 +1,31 @@
+server:
+  port: 9002
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+#    org.springframework.boot.autoconfigure: DEBUG
+
+spring:
+  thymeleaf:
+    cache: false
+  security:
+    oauth2:
+      client:
+        provider:
+          good-authorization-server:
+            authorization-uri: http://localhost:9000/oauth2/authorize
+            token-uri: http://localhost:9000/oauth2/token
+            jwk-set-uri: http://localhost:9000/oauth2/jwks
+        registration:
+          product-client:
+            provider: good-authorization-server
+            client-id: web-client-id-product
+            client-name: web平台-SSO客户端-商品服务
+            client-secret: secret
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:9002/login/oauth2/code/product-client
+            scope: openid,profile
