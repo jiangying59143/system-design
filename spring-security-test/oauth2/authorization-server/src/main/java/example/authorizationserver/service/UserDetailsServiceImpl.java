@@ -29,7 +29,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         SysUserEntity sysUserEntity = userRepository.findSysUserEntityByUsername(username);
-        List<SimpleGrantedAuthority> grantedAuthorityList = Arrays.asList("USER").stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> grantedAuthorityList = Arrays.asList("USER").stream()
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         return new User(username,sysUserEntity.getPassword(),grantedAuthorityList);
     }
